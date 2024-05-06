@@ -14,7 +14,9 @@ export default function Header() {
           </li>
         </ul>
       </nav>
-      <h1>AllFood</h1>
+      <h1>
+        <Link href={"/"}>AllFood</Link>
+      </h1>
       <nav>
         <ul>
           <li>
