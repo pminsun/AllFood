@@ -1,0 +1,29 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 1300px;
+  height: 80px;
+  padding: 0 20px;
+  background: pink;
+}
+
+.header nav ul {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.header nav ul a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  width: 100px;
+  text-transform: uppercase;
+}

@@ -1,0 +1,166 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 100vh;
+}
+.mainfirst {
+  background-color: #c6cdc6;
+}
+.title {
+  font-size: 62px;
+}
+.title p {
+  letter-spacing: 18px;
+}
+.search {
+  width: 100%;
+  height: 80px;
+  margin: 50px 0 80px;
+  border: 1px solid #000;
+}
+/* second */
+.mainsecond {
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  gap: 100px;
+  padding-bottom: 80px;
+  border-bottom: 1px solid #000;
+  margin-top: -100px;
+}
+.infoText {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 230px;
+  margin-bottom: 100px;
+  background-color: pink;
+}
+.infoText h3 {
+  font-size: 32px;
+}
+.infoList {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width: calc(100% - 230px);
+  height: 540px;
+}
+.infoList > div {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 20px;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+.infoList :global(.list_img) {
+  flex: 1;
+  height: 100%;
+  overflow: hidden;
+  background-color: pink;
+}
+.infoList :global(.list_img) img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.infoList :global(.list_name) {
+  width: 100%;
+  height: 80px;
+  background-color: pink;
+}
+
+.infoList :global(.list_name) p {
+  font-size: 20px;
+  word-break: keep-all;
+}
+/* third */
+.mainthird {
+  display: flex;
+  justify-content: space-between;
+  gap: 100px;
+  width: 100%;
+  padding: 80px 20px;
+  border-bottom: 1px solid #000;
+}
+.rankerList {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width: calc(100% - 230px);
+  height: 400px;
+}
+.topRanker {
+  flex: 2 !important;
+  display: flex;
+  flex-direction: row !important;
+  gap: 20px;
+  width: 100%;
+  height: 100%;
+}
+.topRanker > div {
+  flex: 1;
+  height: 100%;
+  background-color: pink;
+}
+.otherRanker {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  gap: 20px;
+}
+.otherRanker > div {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: pink;
+  border-bottom: 1px solid #000;
+}
+.otherRanker :global(.ranker_img) {
+  width: 80px;
+  height: 80px;
+  background-color: red;
+}
+/* mainfourth */
+.mainfourth {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 80px 20px;
+  border-bottom: 1px solid #000;
+}
+.fourthLeft {
+  width: 55%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 400px;
+}
+.fourthLeft :global(.fourth_title) {
+  font-size: 64px;
+  background-color: pink;
+}
+.fourthLeft :global(.fourth_info) {
+  display: flex;
+  padding: 40px 0;
+  margin-top: 10px;
+  background-color: pink;
+}
+.mainfourth :global(.recipes_img) {
+  width: 400px;
+
+  height: 400px;
+  background-color: pink;
+}
+/* mainfifth */
+.mainfifth {
+  padding: 80px 20px;
+}
