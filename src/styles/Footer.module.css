@@ -1,8 +1,16 @@
 .footer {
   width: 100%;
-  max-width: 1300px;
   height: 300px;
-  padding: 40px 0;
+  padding: 50px 0;
+  background-color: #c6cdc6;
+}
+.footer > section {
+  width: 100%;
+  max-width: 1300px;
   margin: 0 auto;
-  background: pink;
+}
+.ftLogo a {
+  font-size: 40px;
+  cursor: pointer;
+  font-family: "Poetsen One", sans-serif;
 }

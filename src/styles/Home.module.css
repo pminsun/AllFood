@@ -72,7 +72,7 @@
 .infoList {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 30px;
   width: calc(100% - 230px);
   height: 540px;
 }
@@ -90,7 +90,7 @@
   flex: 1;
   height: 100%;
   overflow: hidden;
-  background-color: pink;
+  background-color: rgb(248, 248, 248);
 }
 .infoList :global(.list_img) img {
   width: 100%;
@@ -99,13 +99,56 @@
 }
 .infoList :global(.list_name) {
   width: 100%;
-  height: 80px;
-  background-color: pink;
 }
 .infoList :global(.list_name) p {
   font-size: 24px;
   font-weight: 600;
   word-break: keep-all;
+}
+.listInfo {
+  margin-top: 10px;
+}
+.listInfo > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.listInfo > div p:first-of-type {
+  font-size: 20px;
+  color: #585858;
+}
+.listInfo > div p:last-of-type {
+  font-size: 16px;
+  color: #acacac;
+}
+.listInfo ul {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.listInfo ul li {
+  position: relative;
+  padding-left: 18px;
+  color: #585858;
+}
+.listInfo ul li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-60%);
+  width: 10px;
+  height: 10px;
+  background-color: #ffbe61;
+  border-radius: 100%;
+}
+.listInfo ul li:first-of-type:before {
+  background-color: #7aca25;
+}
+.listInfo ul li:last-of-type:before {
+  background-color: #f14647;
 }
 /* third */
 .mainthird {

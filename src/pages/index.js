@@ -2,10 +2,11 @@ import Image from "next/image";
 import styles from "@/styles/Home.module.css";
 import { HiArrowRight } from "react-icons/hi";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function Home() {
   const router = useRouter();
-
+  const [searchTxt, setSearchTxt] = useState("");
   const moveToRecipes = (food) => {
     return () => {
       router.push({
@@ -24,8 +25,17 @@ export default function Home() {
               HELP YOU FIND BEST <p>FOOD RECIPES</p>
             </h2>
             <div className={styles.search}>
-              <input id="search" placeholder="원하는 요리를 검색하세요" />
-              <button>
+              <input
+                id="search"
+                onChange={(e) => setSearchTxt(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    moveToRecipes(searchTxt)();
+                  }
+                }}
+                placeholder="원하는 요리를 영문으로 검색하세요"
+              />
+              <button onClick={moveToRecipes(searchTxt)}>
                 <HiArrowRight />
               </button>
             </div>
@@ -56,6 +66,17 @@ export default function Home() {
               </div>
               <div className="list_name">
                 <p>PASTA</p>
+                <div className={styles.listInfo}>
+                  <div>
+                    <p>288 kcal</p>
+                    <p>100g</p>
+                  </div>
+                  <ul className="nutrients">
+                    <li>PROTEIN 11g</li>
+                    <li>FAT 2g</li>
+                    <li>CARB 54g</li>
+                  </ul>
+                </div>
               </div>
             </div>
             <div onClick={moveToRecipes("pork")}>
@@ -69,6 +90,17 @@ export default function Home() {
               </div>
               <div className="list_name">
                 <p>PORK</p>
+                <div className={styles.listInfo}>
+                  <div>
+                    <p>198 kcal</p>
+                    <p>100g</p>
+                  </div>
+                  <ul className="nutrients">
+                    <li>PROTEIN 19g</li>
+                    <li>FAT 12g</li>
+                    <li>CARB 0g</li>
+                  </ul>
+                </div>
               </div>
             </div>
             <div onClick={moveToRecipes("egg")}>
@@ -82,6 +114,17 @@ export default function Home() {
               </div>
               <div className="list_name">
                 <p>EGG</p>
+                <div className={styles.listInfo}>
+                  <div>
+                    <p>143 kcal</p>
+                    <p>100g</p>
+                  </div>
+                  <ul className="nutrients">
+                    <li>PROTEIN 12g</li>
+                    <li>FAT 9g</li>
+                    <li>CARB 0g</li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
