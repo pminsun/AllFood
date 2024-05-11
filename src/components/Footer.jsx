@@ -8,6 +8,7 @@ export default function Footer() {
         <p className={styles.ftLogo}>
           <Link href={"/"}>AllFood</Link>
         </p>
+        <p>Copyright © Minsun Park 2024. All rights reserved.</p>
       </section>
     </footer>
   );
