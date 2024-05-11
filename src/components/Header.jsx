@@ -7,10 +7,10 @@ export default function Header() {
       <nav>
         <ul>
           <li>
-            <Link href={"/"}>Nutrition</Link>
+            <Link href={"/nutrition"}>Nutrition</Link>
           </li>
           <li>
-            <Link href={"/"}>RECIPES</Link>
+            <Link href={"/recipes"}>RECIPES</Link>
           </li>
         </ul>
       </nav>
@@ -20,10 +20,10 @@ export default function Header() {
       <nav>
         <ul>
           <li>
-            <Link href={"/"}>Login</Link>
+            <Link href={"/user/login"}>Login</Link>
           </li>
           <li>
-            <Link href={"/"}>Sign up</Link>
+            <Link href={"/user/signup"}>Sign up</Link>
           </li>
         </ul>
       </nav>
