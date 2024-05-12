@@ -5,7 +5,7 @@
   align-items: center;
   min-height: 100vh;
 }
-.mainfirst {
+.mainSearch {
   background-color: #c6cdc6;
 }
 .title {
@@ -45,14 +45,13 @@
   height: 50px;
   cursor: pointer;
 }
-/* second */
-.mainsecond {
+/* mainLotOfIngredients */
+.mainLotOfIngredients {
   width: 100%;
   display: flex;
   align-items: flex-end;
-  gap: 100px;
+  gap: 80px;
   padding-bottom: 80px;
-  border-bottom: 1px solid #000;
   margin-top: -100px;
 }
 .infoText {
@@ -150,34 +149,115 @@
 .listInfo ul li:last-of-type:before {
   background-color: #f14647;
 }
-/* third */
-.mainthird {
+
+/* mainRecommendByWeather */
+.mainRecommendByWeather {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 80px 20px;
+}
+.recommendLeft {
+  width: 55%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 400px;
+}
+.recommendLeft :global(.recommend_title) {
+  font-size: 52px;
+  font-weight: 500;
+  font-family: "Poetsen One", sans-serif;
+}
+.recommendLeft :global(.recommend_info) {
+  display: flex;
+  padding: 20px 0;
+  margin-top: 12px;
+  font-size: 22px;
+  line-height: 40px;
+  border-top: 1px solid #000;
+}
+.mainRecommendByWeather :global(.recipes_img) {
+  width: 500px;
+  height: 400px;
+  background-color: pink;
+}
+/* mainCookingYoutuber */
+.mainCookingYoutuber {
   display: flex;
   justify-content: space-between;
-  gap: 100px;
+  gap: 80px;
   width: 100%;
   padding: 80px 20px;
-  border-bottom: 1px solid #000;
 }
 .rankerList {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 60px;
   width: calc(100% - 230px);
-  height: 400px;
+  height: 340px;
 }
 .topRanker {
-  flex: 2 !important;
+  flex: 1.8 !important;
   display: flex;
-  flex-direction: row !important;
+  flex-direction: column !important;
   gap: 20px;
   width: 100%;
   height: 100%;
 }
-.topRanker > div {
+.topRanker > div:first-of-type {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  height: 110px;
+  width: 100%;
+}
+.topRanker > div:last-of-type {
   flex: 1;
-  height: 100%;
-  background-color: pink;
+}
+.topRanker :global(.topranker_info) p:first-of-type {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+.topRanker :global(.topranker_channel) {
+  margin-left: auto;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 14px;
+  font-weight: 600;
+  background-color: #c6cdc6;
+}
+.topRanker :global(.recent_video) {
+  display: flex;
+  gap: 14px;
+  padding-top: 30px;
+  border-top: 2px dotted #adb4ad;
+}
+.topRanker :global(.recent_video .video_info) {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  flex: 1;
+  font-size: 18px;
+}
+.topRanker :global(.recent_video .view) {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  font-size: 14px;
+  text-align: right;
+}
+.topRanker :global(.recent_video .video_info) p:first-of-type,
+.topRanker :global(.recent_video .video_info) p:last-of-type {
+  font-size: 14px;
+  font-weight: 400;
+}
+.topRanker :global(.recent_video .video_info) p {
+  word-break: keep-all;
+  margin-bottom: 10px;
+  font-weight: 600;
 }
 .otherRanker {
   flex: 1;
@@ -187,51 +267,88 @@
   height: 100%;
   gap: 20px;
 }
-.otherRanker > div {
+.otherRanker > a {
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: pink;
-  border-bottom: 1px solid #000;
+  border-bottom: 2px dotted #adb4ad;
 }
-.otherRanker :global(.ranker_img) {
-  width: 80px;
-  height: 80px;
-  background-color: red;
+.otherRanker > a:last-of-type {
+  border-bottom: none;
 }
-/* mainfourth */
-.mainfourth {
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  padding: 80px 20px;
-  border-bottom: 1px solid #000;
-}
-.fourthLeft {
-  width: 55%;
+.otherRanker :global(.ranker_info) {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  height: 400px;
+  gap: 10px;
 }
-.fourthLeft :global(.fourth_title) {
-  font-size: 64px;
-  background-color: pink;
+.otherRanker :global(.ranker_info) p:last-of-type {
+  font-size: 12px;
 }
-.fourthLeft :global(.fourth_info) {
+.otherRanker :global(.ranker_img) {
   display: flex;
-  padding: 40px 0;
-  margin-top: 10px;
-  background-color: pink;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  overflow: hidden;
+  background-color: red;
 }
-.mainfourth :global(.recipes_img) {
-  width: 400px;
-
-  height: 400px;
-  background-color: pink;
-}
-/* mainfifth */
-.mainfifth {
+/* mainNutrition */
+.mainNutrition {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 60px;
   padding: 80px 20px;
+}
+.infoNutritionText {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: center;
+  justify-content: center;
+}
+.infoNutritionText h3 {
+  font-size: 52px;
+  font-weight: 500;
+  font-family: "Poetsen One", sans-serif;
+}
+.infoNutritionText p {
+  word-break: keep-all;
+  text-align: center;
+  font-size: 22px;
+  line-height: 32px;
+}
+.submitNutrition {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  width: 80%;
+  height: 300px;
+}
+
+.submitNutrition textarea {
+  width: 100%;
+  height: 200px;
+  padding: 20px;
+  font-size: 24px;
+  resize: none;
+  border: 1px solid #c6cdc6;
+}
+.submitNutrition :global(.submitNutrition_btn) {
+  height: 70px;
+  width: 250px;
+  font-size: 24px;
+  font-weight: 600;
+  font-family: "Poetsen One", sans-serif;
+  word-spacing: 20px;
+  background-color: #c6cdc6;
+  transition: all 0.2s;
+}
+.submitNutrition :global(.submitNutrition_btn):hover {
+  background-color: #adb4ad;
+  color: #fff;
 }

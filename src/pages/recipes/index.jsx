@@ -22,17 +22,24 @@ export default function Recipes({ query }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  console.log(query);
+
   return (
     <section className={`first_content`}>
       <section className="layout_size">
         <div className={styles.recipe_name}>
-          <h2 className={styles.recipe_name}>{query.food} Recipes</h2>
-          <p>
-            10,000 <span>건</span>
-          </p>
+          <h2 className={styles.recipe_name}>{query.food || ""} Recipes</h2>
+          {query.food && (
+            <p>
+              10,000 <span>건</span>
+            </p>
+          )}
         </div>
         <div className={styles.search}>
-          <input id="search" placeholder="원하는 요리를 검색하세요" />
+          <input
+            id="search"
+            placeholder="원하는 요리 또는 식재료를 검색하세요"
+          />
           <button>
             <HiArrowRight />
           </button>

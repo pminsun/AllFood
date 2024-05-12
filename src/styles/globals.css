@@ -85,10 +85,12 @@ a {
 li {
   list-style: none;
 }
-input {
+input,
+textarea {
   border: none;
 }
-input:focus {
+input:focus,
+textarea:focus {
   outline: none;
 }
 button {
