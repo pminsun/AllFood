@@ -3,7 +3,7 @@ import Link from "next/link";
 import styles from "@/styles/Home.module.css";
 import { HiArrowRight } from "react-icons/hi";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQueries, useQuery } from "@tanstack/react-query";
 import { commaThousand, dateFormat } from "@/config";
 
@@ -149,6 +149,7 @@ export default function Home() {
                   alt="egg"
                   width={500}
                   height={540}
+                  priority
                 />
               </div>
               <div className="list_name">

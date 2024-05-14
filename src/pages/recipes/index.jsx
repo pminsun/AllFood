@@ -22,8 +22,6 @@ export default function Recipes({ query }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  console.log(query);
-
   return (
     <section className={`first_content`}>
       <section className="layout_size">

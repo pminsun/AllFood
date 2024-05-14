@@ -221,12 +221,23 @@
   margin-bottom: 10px;
 }
 .topRanker :global(.topranker_channel) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin-left: auto;
   text-align: center;
   text-transform: uppercase;
-  font-size: 14px;
+  font-size: 10px;
   font-weight: 600;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
   background-color: #c6cdc6;
+  transition: all 0.2s;
+}
+.topRanker :global(.topranker_channel):hover {
+  background-color: #adb4ad;
+  color: #fff;
 }
 .topRanker :global(.recent_video) {
   display: flex;
@@ -347,6 +358,7 @@
   word-spacing: 20px;
   background-color: #c6cdc6;
   transition: all 0.2s;
+  border-radius: 10px;
 }
 .submitNutrition :global(.submitNutrition_btn):hover {
   background-color: #adb4ad;
