@@ -26,7 +26,7 @@ export default function Recipes({ query }) {
     <section className={`first_content`}>
       <section className="layout_size">
         <div className={styles.recipe_name}>
-          <h2 className={styles.recipe_name}>{query.food || ""} Recipes</h2>
+          <h2>{query.food || ""} Recipes</h2>
           {query.food && (
             <p>
               10,000 <span>건</span>

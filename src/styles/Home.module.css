@@ -233,6 +233,7 @@
   height: 70px;
   border-radius: 50%;
   background-color: #c6cdc6;
+  cursor: pointer;
   transition: all 0.2s;
 }
 .topRanker :global(.topranker_channel):hover {
@@ -310,7 +311,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 60px;
+  gap: 10px;
   padding: 80px 20px;
 }
 .infoNutritionText {
@@ -341,15 +342,10 @@
   height: 300px;
 }
 
-.submitNutrition textarea {
-  width: 100%;
-  height: 200px;
-  padding: 20px;
-  font-size: 24px;
-  resize: none;
-  border: 1px solid #c6cdc6;
-}
 .submitNutrition :global(.submitNutrition_btn) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: 70px;
   width: 250px;
   font-size: 24px;

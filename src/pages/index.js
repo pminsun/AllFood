@@ -3,9 +3,11 @@ import Link from "next/link";
 import styles from "@/styles/Home.module.css";
 import { HiArrowRight } from "react-icons/hi";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useQueries, useQuery } from "@tanstack/react-query";
 import { commaThousand, dateFormat } from "@/config";
+import Lottie from "react-lottie-player";
+import nutritionCheck from "../../public/ani/nutrition_check.json";
 
 export default function Home() {
   const router = useRouter();
@@ -72,7 +74,7 @@ export default function Home() {
                     moveToRecipes(searchTxt)();
                   }
                 }}
-                placeholder="원하는 요리를 영문으로 검색하세요"
+                placeholder="원하는 요리 또는 식재료를 영문으로 검색하세요"
               />
               <button onClick={moveToRecipes(searchTxt)}>
                 <HiArrowRight />
@@ -350,15 +352,20 @@ export default function Home() {
           <div className={styles.infoNutritionText}>
             <h3>Check your nutrition</h3>
             <p>
-              영양성분을 확인하고 싶은 요리를 입력해주세요. <br />
+              영양성분을 확인하고 싶은 레시피가 있다면 버튼을 눌러주세요. <br />
               칼로리, 지방, 단백질 등 다양한 성분을 분석하여 자세히 알려드릴게요
             </p>
           </div>
           <div className={styles.submitNutrition}>
-            <textarea />
-            <button className="submitNutrition_btn" type="text">
+            <Lottie
+              loop
+              animationData={nutritionCheck}
+              play
+              style={{ width: 220, height: 220 }}
+            />
+            <Link href={"/nutrition"} className="submitNutrition_btn">
               Analysis
-            </button>
+            </Link>
           </div>
         </section>
       </main>

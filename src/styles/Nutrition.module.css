@@ -1,0 +1,148 @@
+.page_title {
+  font-size: 42px;
+  text-transform: uppercase;
+  font-family: "Poetsen One", sans-serif;
+}
+.page_info {
+  font-size: 20px;
+  line-height: 32px;
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
+.nutritionInfo {
+  display: flex;
+  align-items: flex-start;
+  gap: 60px;
+}
+.submitNutrition {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: 550px;
+  height: 500px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #adb4ad;
+}
+.submitNutrition textarea {
+  width: 100%;
+  height: 450px;
+  padding: 20px;
+  font-size: 24px;
+  resize: none;
+}
+.submitNutrition :global(.submitNutrition_btn) {
+  height: 70px;
+  width: 100%;
+  font-size: 24px;
+  font-weight: 600;
+  font-family: "Poetsen One", sans-serif;
+  word-spacing: 20px;
+  background-color: #c6cdc6;
+  transition: all 0.2s;
+}
+.submitNutrition :global(.submitNutrition_btn):hover {
+  background-color: #adb4ad;
+  color: #fff;
+}
+.nutritionFacts {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+  height: 500px;
+}
+.nutritionFacts :global(.title) {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.nutritionFacts :global(.total) {
+  display: flex;
+  align-items: center;
+  height: 38px;
+  justify-content: space-between;
+}
+.calories {
+  font-size: 32px;
+  font-weight: 800;
+}
+.nutritionGraph {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  flex: 1;
+  margin-top: 20px;
+  position: relative;
+}
+.nutritionGraph > div:first-of-type {
+  position: relative;
+  width: 400px;
+  height: 400px;
+}
+.nutritionGraph > div:first-of-type > div > div {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.nutritionGraphInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.nutritionGraphInfo > div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.nutritionGraphInfo > div :global(.dot) {
+  width: 10px;
+  height: 10px;
+  border-radius: 100%;
+  background-color: #ddbf5c;
+}
+.nutritionGraphInfo > div :global(.dot.d_sec) {
+  background-color: #88dd4e;
+}
+.nutritionGraphInfo > div :global(.dot.d_third) {
+  background-color: #75d1d8;
+}
+.nutritionGraphInfo > div :global(.dot.d_fourth) {
+  background-color: #8a9dd1;
+}
+.nutritionGraphInfo > div :global(.dot.d_fifth) {
+  background-color: #c6a8e2;
+}
+.nutritionGraphInfo > div p:first-of-type {
+  width: 100px;
+}
+.nutritionTable {
+  margin-top: 60px;
+  width: 100%;
+  background-color: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #adb4ad;
+}
+.nutritionTable table {
+  width: 100%;
+}
+.nutritionTable thead th {
+  height: 50px;
+  font-weight: 600;
+  border-right: 1px solid #adb4ad;
+  border-bottom: 1px solid #adb4ad;
+}
+.nutritionTable tbody tr:nth-child(odd) {
+  background-color: rgb(235, 238, 235);
+}
+.nutritionTable tbody td {
+  height: 50px;
+  text-align: center;
+}
+.nutritionTable thead th:last-of-type {
+  border-right: none;
+}

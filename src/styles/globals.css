@@ -102,6 +102,9 @@ button {
   overflow: visible;
   cursor: pointer;
 }
+table {
+  border-collapse: collapse;
+}
 
 .wrap {
   padding-bottom: 100px;
@@ -116,4 +119,20 @@ button {
   max-width: 1300px;
   padding: 0 20px;
   margin: 0 auto;
+}
+
+.fullScreen_loading {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 20;
+}
+.backdrop_loading {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  background-color: black;
+  opacity: 0.5;
+  z-index: 10;
 }
