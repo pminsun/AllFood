@@ -178,9 +178,16 @@
   border-top: 1px solid #000;
 }
 .mainRecommendByWeather :global(.recipes_img) {
-  width: 500px;
-  height: 400px;
-  background-color: pink;
+  width: 450px;
+  height: 450px;
+  border-radius: 100%;
+  overflow: hidden;
+}
+.mainRecommendByWeather :global(.recipes_img img) {
+  object-fit: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 /* mainCookingYoutuber */
 .mainCookingYoutuber {

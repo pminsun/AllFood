@@ -188,11 +188,18 @@ export default function Home() {
               </p>
             </div>
           </div>
-          <div className="recipes_img"></div>
+          <div className="recipes_img">
+            <Image
+              src={"/image/food/kalguksu.jpg"}
+              alt="egg"
+              width={450}
+              height={450}
+              priority
+            />
+          </div>
         </section>
 
         <section className={`${styles.mainCookingYoutuber} layout_size`}>
-          {/* https://velog.io/@kknyapple/%ED%95%A0%EB%8B%B9%EB%9F%89-%EC%83%9D%EA%B0%81%ED%95%98%EB%A9%B0-YouTube-API%EB%A1%9C-%EC%9B%90%ED%95%98%EB%8A%94-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EC%96%BB%EA%B8%B0 */}
           <div className={styles.infoText}>
             <h3>
               Top Cooking <br />

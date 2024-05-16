@@ -1,0 +1,52 @@
+.page_title {
+  font-size: 42px;
+  text-align: center;
+  text-transform: uppercase;
+  font-family: "Poetsen One", sans-serif;
+}
+.login_form {
+  margin: 50px auto 30px;
+  max-width: 500px;
+}
+.login_form > div {
+  margin-bottom: 20px;
+}
+.login_form input {
+  width: 100%;
+  height: 60px;
+  padding: 10px;
+  font-size: 18px;
+  border-radius: 10px;
+  border: 1px solid #adb4ad;
+}
+.errorLogin {
+  padding-top: 4px;
+  font-size: 14px;
+  padding-left: 10px;
+  color: rgb(196, 46, 9);
+}
+.login_btn {
+  margin-top: 30px;
+  width: 100%;
+  font-size: 24px;
+  font-weight: 800;
+  border-radius: 10px;
+  background-color: #adb4ad;
+  height: 60px;
+  transition: all 0.2s;
+}
+.login_btn:hover {
+  background-color: #adb4ad;
+  color: #fff;
+}
+.moveTo_signUp {
+  display: flex;
+  width: 150px;
+  padding: 10px;
+  margin: 0 auto;
+  align-items: center;
+  justify-content: center;
+}
+.moveTo_signUp:hover {
+  color: #adb4ad;
+}

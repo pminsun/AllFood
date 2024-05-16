@@ -1,29 +1,34 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import styles from "@/styles/Header.module.css";
+import { signOut, useSession } from "next-auth/react";
 
 export default function Header() {
-  const [scroll, setScroll] = useState(false);
+  const url =
+    process.env.NODE_ENV === "production"
+      ? `https://campaign.veloga.co.kr`
+      : `http://localhost:3002`;
+  const { data: session, status } = useSession();
 
+  const [scrollPosition, setScrollPosition] = useState(0);
   const handleScroll = () => {
-    if (window.scrollY >= 50) {
-      setScroll(true);
-    } else {
-      setScroll(false);
-    }
+    const position = window.scrollY;
+    setScrollPosition(position);
   };
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
     return () => {
-      window.removeEventListener("scroll", handleScroll); //clean up
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
-  console.log(scroll);
-
   return (
-    <header className={`${styles.header} ${scroll ? "header_change" : ""}`}>
+    <header
+      className={`${styles.header} ${
+        scrollPosition > 80 ? styles.headerChange : ""
+      }`}
+    >
       <div>
         <nav>
           <ul>
@@ -41,11 +46,19 @@ export default function Header() {
         <nav>
           <ul>
             <li>
-              <Link href={"/user/login"}>Login</Link>
+              {status === "authenticated" ? (
+                <Link href={"/user/mypage"}>MY Page</Link>
+              ) : (
+                <Link href={"/user/login"}>LOGIN</Link>
+              )}
             </li>
-            <li>
-              <Link href={"/user/signup"}>Sign up</Link>
-            </li>
+            {status === "authenticated" ? (
+              <p onClick={() => signOut({ callbackUrl: `/` })}>LOGOUT</p>
+            ) : (
+              <li>
+                <Link href={"/user/signup"}>Sign up</Link>
+              </li>
+            )}
           </ul>
         </nav>
       </div>
