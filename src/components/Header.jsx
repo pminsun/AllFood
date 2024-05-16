@@ -3,8 +3,27 @@ import { useState, useEffect } from "react";
 import styles from "@/styles/Header.module.css";
 
 export default function Header() {
+  const [scroll, setScroll] = useState(false);
+
+  const handleScroll = () => {
+    if (window.scrollY >= 50) {
+      setScroll(true);
+    } else {
+      setScroll(false);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll); //clean up
+    };
+  }, []);
+
+  console.log(scroll);
+
   return (
-    <header className={`${styles.header} `}>
+    <header className={`${styles.header} ${scroll ? "header_change" : ""}`}>
       <div>
         <nav>
           <ul>
