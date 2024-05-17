@@ -236,17 +236,18 @@ export default function Home() {
             </div>
           </div>
           <div className="recipes_img">
-            <Image
+            {foodRecommendation && 
+             <Image
               src={
                 foodRecommendation === "망고빙수"
-                  ? `/image/food/${foodRecommendation}.png`
+                  ? `/image/food/망고빙수.png`
                   : `/image/food/${foodRecommendation}.jpg`
               }
               alt="egg"
               width={450}
               height={450}
               priority
-            />
+            />}
           </div>
         </section>
 
