@@ -1,11 +1,22 @@
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { HiArrowRight } from "react-icons/hi";
 import styles from "@/styles/List.module.css";
 import { testData } from "../../../lib/test";
 import Image from "next/image";
 
 export default function Recipes({ query }) {
+  const router = useRouter();
+  const [searchTxt, setSearchTxt] = useState("");
+  const moveToRecipes = (food) => {
+    return () => {
+      router.replace({
+        pathname: "/recipes",
+        query: { food: food },
+      });
+    };
+  };
+
   //const [recipesList, setRecipesList] = useState({});
 
   const fetchData = async () => {
@@ -36,9 +47,15 @@ export default function Recipes({ query }) {
         <div className={styles.search}>
           <input
             id="search"
+            onChange={(e) => setSearchTxt(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                moveToRecipes(searchTxt)();
+              }
+            }}
             placeholder="원하는 요리 또는 식재료를 검색하세요"
           />
-          <button>
+          <button onClick={moveToRecipes(searchTxt)}>
             <HiArrowRight />
           </button>
         </div>
