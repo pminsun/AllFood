@@ -3,11 +3,12 @@ import Link from "next/link";
 import styles from "@/styles/Home.module.css";
 import { HiArrowRight } from "react-icons/hi";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQueries, useQuery } from "@tanstack/react-query";
 import { commaThousand, dateFormat } from "@/config";
 import Lottie from "react-lottie-player";
 import nutritionCheck from "../../public/ani/nutrition_check.json";
+import { weatherFood } from "../../lib/weatherFood";
 
 export default function Home() {
   const router = useRouter();
@@ -56,6 +57,53 @@ export default function Home() {
       };
     },
   });
+
+  // 오늘날씨 (서울기준)
+  const fetchTodayWeather = async () => {
+    const res = await fetch(
+      `https://api.openweathermap.org/data/2.5/weather?lat=37.5666791&lon=126.9782914&appid=${process.env.NEXT_PUBLIC_OPENWEATHER_APP_ID}&units=metric`
+    );
+    return res.json();
+  };
+
+  const { data: TodayWeather } = useQuery({
+    queryKey: ["TodayWeatherKey"],
+    queryFn: fetchTodayWeather,
+  });
+
+  const [foodRecommendation, setFoodRecommendation] = useState("");
+  const [todayWeatherTxt, setTodayWeatherTxt] = useState("");
+  const [foodTaste, setFoodTaste] = useState("");
+  const [tasteTxtLong, setTasteTxtLong] = useState("");
+  useEffect(() => {
+    const weatherDescription = TodayWeather?.weather[0].description;
+    const temperature = TodayWeather?.main.temp;
+
+    let weatherKey;
+
+    if (weatherDescription === "rain") {
+      weatherKey = "rain";
+    } else if (temperature >= 30) {
+      weatherKey = "hot";
+    } else if (temperature <= 0) {
+      weatherKey = "cold";
+    } else if (temperature > 0 && temperature <= 10) {
+      weatherKey = "windy";
+    } else {
+      weatherKey = Object.keys(weatherFood).find(
+        (key) => weatherFood[key].weatherTxtEN === weatherDescription
+      );
+    }
+
+    if (weatherKey) {
+      const { food, weatherTxt, tasteTxt, tasteTxtLong } =
+        weatherFood[weatherKey];
+      setFoodRecommendation(food);
+      setTodayWeatherTxt(weatherTxt);
+      setFoodTaste(tasteTxt);
+      setTasteTxtLong(tasteTxtLong);
+    }
+  }, [TodayWeather?.main.temp, TodayWeather?.weather]);
 
   return (
     <>
@@ -173,7 +221,6 @@ export default function Home() {
         </section>
 
         <section className={`${styles.mainRecommendByWeather} layout_size`}>
-          {/* 날씨에 따른 추천음식 -  https://ai-creator.tistory.com/31 */}
           <div className={styles.recommendLeft}>
             <p className="recommend_title">
               TODAY&apos;s <br />
@@ -182,15 +229,19 @@ export default function Home() {
             </p>
             <div className="recommend_info">
               <p>
-                오늘은 쌀쌀한 날씨네요. 이런 날씨에는 따뜻한 칼국수가
-                어떠신가요? <br />
-                몸도 마음도 따뜻해지는 맛있는 식사를 즐겨보세요.
+                오늘은 {todayWeatherTxt} 날씨네요. 이런 날씨에는 {foodTaste}{" "}
+                {foodRecommendation}가 어떠신가요? <br />
+                {tasteTxtLong} 즐겨보세요.
               </p>
             </div>
           </div>
           <div className="recipes_img">
             <Image
-              src={"/image/food/kalguksu.jpg"}
+              src={
+                foodRecommendation === "망고빙수"
+                  ? `/image/food/${foodRecommendation}.png`
+                  : `/image/food/${foodRecommendation}.jpg`
+              }
               alt="egg"
               width={450}
               height={450}
