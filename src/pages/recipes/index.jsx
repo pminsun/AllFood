@@ -110,7 +110,7 @@ export default function Recipes({ query }) {
             <HiArrowRight />
           </button>
         </div>
-        {recipesLoading && (
+        {recipesLoading && query.food && (
           <div className={styles.loadingArea}>
             <Loading />
           </div>
