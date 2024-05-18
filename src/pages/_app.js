@@ -13,7 +13,7 @@ export default function App({
 
   return (
     <QueryClientProvider client={queryClient}>
-      <SessionProvider session={session}>
+      <SessionProvider session={pageProps.session}>
         <Layout>
           <Component {...pageProps} />
         </Layout>

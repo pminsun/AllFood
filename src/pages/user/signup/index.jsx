@@ -1,14 +1,31 @@
 import styles from "@/styles/User.module.css";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../../../firebase/firebasedb";
+import { useRouter } from "next/router";
+
 export default function Signup() {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
     setError,
-    setValue,
     formState: { errors, isSubmitting },
   } = useForm();
+
+  const signUpAccont = async (data) => {
+    try {
+      await createUserWithEmailAndPassword(auth, data.email, data.password);
+      router.replace("/user/login");
+    } catch (error) {
+      if (error.code === "auth/email-already-in-use") {
+        setError("useEmail", {
+          message: "이미 사용 중인 이메일입니다.",
+        });
+      }
+    }
+  };
 
   return (
     <section className={`first_content`}>
@@ -16,8 +33,11 @@ export default function Signup() {
         <div>
           <h2 className={styles.page_title}>Sign Up</h2>
         </div>
-        <form className={styles.login_form}>
-          <div>
+        <form
+          onSubmit={handleSubmit(signUpAccont)}
+          className={styles.login_form}
+        >
+          {/* <div>
             <div className="inputArea">
               <input
                 type="text"
@@ -30,7 +50,7 @@ export default function Signup() {
             {errors.name && (
               <span className="errorTxt">{errors.name.message}</span>
             )}
-          </div>
+          </div> */}
           <div>
             <div className="inputArea">
               <input
@@ -66,6 +86,13 @@ export default function Signup() {
               <span className="errorTxt">{errors.password.message}</span>
             )}
           </div>
+          <p {...register("useEmail")}>
+            {errors.useEmail && (
+              <span className={styles.errorLogin}>
+                {errors.useEmail.message}
+              </span>
+            )}
+          </p>
           <button
             type="submit"
             className={styles.login_btn}

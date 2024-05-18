@@ -45,9 +45,9 @@ export default function Recipes({ query }) {
 
       setRecipesList(newRecipes.hits);
       setTotalReciepeLength(newRecipes.count);
-      setNextPageLink(newRecipes._links.next.href);
+      setNextPageLink(newRecipes?._links?.next.href);
       setPreviousPageLink(
-        newRecipes._links.previous
+        newRecipes._links?.previous
           ? newRecipes._links.previous.href
               .split("_cont=")[1]
               .split("&type=")[0]
@@ -118,7 +118,7 @@ export default function Recipes({ query }) {
         {query.food && (
           <>
             <section className={styles.recipes}>
-              {recipesList.map((recipe, index) => (
+              {recipesList?.map((recipe, index) => (
                 <List key={recipe.recipe.labe} recipe={recipe} />
               ))}
             </section>
