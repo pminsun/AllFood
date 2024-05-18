@@ -79,21 +79,21 @@ export default function Home() {
     const weatherDescription = TodayWeather?.weather[0].description;
     const temperature = TodayWeather?.main.temp;
 
-    let weatherKey;
+    const determineWeatherKey = () => {
+      if (weatherDescription === "rain") return "rain";
+      if (weatherDescription === "snow") return "snow";
+      if (temperature >= 30) return "hot";
+      if (temperature > 10 && temperature < 30 && weatherDescription !== "rain")
+        return "sunny";
+      if (temperature <= 0) return "cold";
+      if (temperature > 0 && temperature <= 10) return "windy";
 
-    if (weatherDescription === "rain") {
-      weatherKey = "rain";
-    } else if (temperature >= 30) {
-      weatherKey = "hot";
-    } else if (temperature <= 0) {
-      weatherKey = "cold";
-    } else if (temperature > 0 && temperature <= 10) {
-      weatherKey = "windy";
-    } else {
-      weatherKey = Object.keys(weatherFood).find(
+      return Object.keys(weatherFood).find(
         (key) => weatherFood[key].weatherTxtEN === weatherDescription
       );
-    }
+    };
+
+    const weatherKey = determineWeatherKey();
 
     if (weatherKey) {
       const { food, weatherTxt, tasteTxt, tasteTxtLong } =
@@ -236,18 +236,19 @@ export default function Home() {
             </div>
           </div>
           <div className="recipes_img">
-            {foodRecommendation && 
-             <Image
-              src={
-                foodRecommendation === "망고빙수"
-                  ? `/image/food/망고빙수.png`
-                  : `/image/food/${foodRecommendation}.jpg`
-              }
-              alt="egg"
-              width={450}
-              height={450}
-              priority
-            />}
+            {foodRecommendation && (
+              <Image
+                src={
+                  foodRecommendation === "망고빙수"
+                    ? `/image/food/망고빙수.png`
+                    : `/image/food/${foodRecommendation}.jpg`
+                }
+                alt="egg"
+                width={450}
+                height={450}
+                priority
+              />
+            )}
           </div>
         </section>
 

@@ -47,12 +47,13 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 35px;
+  min-height: 1900px;
 }
-.recipes > div {
+.recipes > a {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  height: 350px;
+  justify-content: flex-start;
+  gap: 10px;
   cursor: pointer;
 }
 .pagination {
@@ -60,21 +61,35 @@
   padding: 14px 0;
   display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  background-color: pink;
+  justify-content: space-between;
 }
-.recipes > div :global(.image_area) {
+.pagination button {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 20px;
+}
+.recipes > a :global(.image_area) {
   width: 100%;
   height: 300px;
 }
-.recipes > div :global(.image_area img) {
+.recipes > a :global(.image_area img) {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
-.recipes > div :global(.item_name) {
+.recipes > a :global(.item_name) {
   width: 100%;
   font-family: "Poetsen One", sans-serif;
   font-size: 22px;
+}
+.noneRecipes {
+  text-align: center;
+  font-size: 22px;
+}
+.loadingArea {
+  position: absolute;
+  top: 300px;
+  left: 50%;
+  transform: translateX(-50%);
 }
