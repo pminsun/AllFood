@@ -100,20 +100,50 @@
   /* background-color: pink; */
 }
 .tabTitle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   font-size: 20px;
   margin-bottom: 20px;
   padding-bottom: 12px;
   font-weight: 600;
   border-bottom: 2px solid #c6cdc6;
 }
+.tabTitle_btn_area {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.tabTitle_btn {
+  padding: 8px 20px;
+  font-size: 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  background-color: #c6cdc6;
+  transition: all 0.2s;
+}
+.tabTitle_btn:hover {
+  background-color: #adb4ad;
+}
 .myList_area {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 35px;
 }
-.myList_area div {
-  height: 200px;
-  background-color: rgb(185, 126, 126);
+.myList_area > a {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 240px;
+}
+.item_img {
+  width: 100%;
+  height: 200px !important;
+  overflow: hidden;
+  background-color: #c6cdc6;
+}
+.item_name {
+  font-size: 20px;
 }
 
 /* my account */
@@ -135,20 +165,53 @@
   font-size: 18px;
   border: 2px solid #c6cdc6;
 }
-.myAccount_btnarea {
+.myListDetail_area {
+  display: flex;
+  gap: 80px;
+}
+.myListDetail_area h3 {
+  font-size: 32px;
+}
+.item_name_area {
+  border-bottom: 2px solid #c6cdc6;
+  display: flex;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  align-items: center;
+  justify-content: space-between;
+}
+.item_sub {
+  font-size: 24px;
+}
+.item_list {
   display: flex;
   align-items: center;
-  gap: 20px;
-  justify-content: flex-end;
+  gap: 10px;
 }
-.myAccount_btnarea button {
-  background-color: #c6cdc6;
-  padding: 10px 0;
-  width: 100px;
-  font-size: 16px;
-  border-radius: 10px;
-  transition: all 0.2s;
+.ing_area {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
-.myAccount_btnarea button:hover {
-  background-color: #adb4ad;
+.ing_list_area {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.reci_area {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 30px;
+}
+.reci_list_area {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.reci_list p {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 18px;
 }

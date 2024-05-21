@@ -1,8 +1,17 @@
 import styles from "@/styles/User.module.css";
 import { useSession } from "next-auth/react";
+import { useForm } from "react-hook-form";
 
 export default function MyAccount() {
   const { data: session, status } = useSession();
+
+  const {
+    register,
+    handleSubmit,
+    setError,
+    setValue,
+    formState: { errors, isSubmitting },
+  } = useForm();
 
   return (
     <div className={styles.myAccount_area}>
@@ -12,11 +21,7 @@ export default function MyAccount() {
       </div>
       <div className={styles.myAccount_box}>
         <p className={styles.myAccount_title}>비밀번호 재설정</p>
-        <input value={session && session.user.email} />
-      </div>
-      <div className={styles.myAccount_btnarea}>
-        <button>수정</button>
-        <button>탈퇴</button>
+        <input />
       </div>
     </div>
   );

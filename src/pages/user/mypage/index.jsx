@@ -5,6 +5,7 @@ import { HiOutlineUser, HiOutlinePencilAlt } from "react-icons/hi";
 import { IoLogOutOutline } from "react-icons/io5";
 import MyList from "@/components/MyList";
 import MyAccount from "@/components/MyAccount";
+import Link from "next/link";
 
 export default function Mypage() {
   const { data: session, status } = useSession();
@@ -12,10 +13,13 @@ export default function Mypage() {
   const tabContent = [
     {
       title: "내 레시피",
+      titleBtn: "추가",
       content: <MyList />,
     },
     {
       title: "계정 정보",
+      titleBtn: "수정",
+      titleBtnTwo: "탈퇴",
       content: <MyAccount />,
     },
   ];
@@ -55,7 +59,30 @@ export default function Mypage() {
             </p>
           </div>
           <div className={styles.mypageCon}>
-            <p className={styles.tabTitle}>{tabContent[tab].title}</p>
+            <div className={styles.tabTitle}>
+              <p>{tabContent[tab].title}</p>
+              <div className={styles.tabTitle_btn_area}>
+                {tabContent[tab].titleBtn === "추가" && (
+                  <Link
+                    href={"/user/mypage/add"}
+                    className={styles.tabTitle_btn}
+                  >
+                    {tabContent[tab].titleBtn}
+                  </Link>
+                )}
+
+                {tabContent[tab].titleBtnTwo && (
+                  <>
+                    <p className={styles.tabTitle_btn}>
+                      {tabContent[tab].titleBtn}
+                    </p>
+                    <p className={styles.tabTitle_btn}>
+                      {tabContent[tab].titleBtnTwo}
+                    </p>
+                  </>
+                )}
+              </div>
+            </div>
             <div>{tabContent[tab].content}</div>
           </div>
         </section>
