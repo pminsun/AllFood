@@ -23,45 +23,67 @@ export default function Header() {
     };
   }, []);
 
+  const [logoutModal, setLogoutModal] = useState(false);
+  const handleShowLogoutModal = () => {
+    setLogoutModal(true);
+  };
+
   return (
-    <header
-      className={`${styles.header} ${
-        scrollPosition > 80 ? styles.headerChange : ""
-      }`}
-    >
-      <div>
-        <nav>
-          <ul>
-            <li>
-              <Link href={"/nutrition"}>Nutrition</Link>
-            </li>
-            <li>
-              <Link href={"/recipes"}>RECIPES</Link>
-            </li>
-          </ul>
-        </nav>
-        <h1>
-          <Link href={"/"}>AllFood</Link>
-        </h1>
-        <nav>
-          <ul>
-            <li>
-              {status === "authenticated" ? (
-                <Link href={"/user/mypage"}>MY Page</Link>
-              ) : (
-                <Link href={"/user/login"}>LOGIN</Link>
-              )}
-            </li>
-            {status === "authenticated" ? (
-              <p onClick={() => signOut({ callbackUrl: `/` })}>LOGOUT</p>
-            ) : (
+    <>
+      <header
+        className={`${styles.header} ${
+          scrollPosition > 80 ? styles.headerChange : ""
+        }`}
+      >
+        <div>
+          <nav>
+            <ul>
               <li>
-                <Link href={"/user/signup"}>Sign up</Link>
+                <Link href={"/nutrition"}>Nutrition</Link>
               </li>
-            )}
-          </ul>
-        </nav>
-      </div>
-    </header>
+              <li>
+                <Link href={"/recipes"}>RECIPES</Link>
+              </li>
+            </ul>
+          </nav>
+          <h1>
+            <Link href={"/"}>AllFood</Link>
+          </h1>
+          <nav>
+            <ul>
+              <li>
+                {status === "authenticated" ? (
+                  <Link href={"/user/mypage"}>MY Page</Link>
+                ) : (
+                  <Link href={"/user/login"}>LOGIN</Link>
+                )}
+              </li>
+              {status === "authenticated" ? (
+                <p onClick={handleShowLogoutModal}>LOGOUT</p>
+              ) : (
+                <li>
+                  <Link href={"/user/signup"}>Sign up</Link>
+                </li>
+              )}
+            </ul>
+          </nav>
+        </div>
+      </header>
+      {logoutModal && (
+        <>
+          <div className="modalBox">
+            <div className="modalTop">
+              <p className="modalTitle">LOGOUT</p>
+            </div>
+            <p className="modalCon">로그아웃 하시겠습니까?</p>
+            <div className="modalBtn_area">
+              <p onClick={() => setLogoutModal(false)}>취소</p>
+              <p onClick={() => signOut({ callbackUrl: `/` })}>확인</p>
+            </div>
+          </div>
+          <div className="modalBox_bg" />
+        </>
+      )}
+    </>
   );
 }

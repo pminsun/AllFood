@@ -21,7 +21,7 @@ export default function MyAccount() {
       </div>
       <div className={styles.myAccount_box}>
         <p className={styles.myAccount_title}>비밀번호 재설정</p>
-        <input />
+        <input type="password" disabled value={"********"} />
       </div>
     </div>
   );
