@@ -2,14 +2,16 @@ import styles from "@/styles/User.module.css";
 import Image from "next/image";
 import { useState } from "react";
 import { HiOutlinePlusSm, HiOutlineMinusSm } from "react-icons/hi";
+import { collection, addDoc } from "firebase/firestore";
+import { fireStore } from "../../../../firebase/firebasedb";
 
 export default function MyListAdd() {
   const [recipeName, setRecipeName] = useState("");
-  //const [ingredients, setIngredients] = useState([{ id: 0 }]);
   const [ingredients, setIngredients] = useState([
     { id: 0, name: "", quantity: "", unit: "단위" },
   ]);
   const [submitImage, setSubmitImage] = useState("");
+  const [showImage, setShowImage] = useState("");
   const [recipeInstructions, setRecipeInstructions] = useState("");
 
   const handleRecipeName = (e) => {
@@ -37,14 +39,16 @@ export default function MyListAdd() {
   const handleChangeFile = (e) => {
     const file = e.target.files[0];
     const imageUrl = URL.createObjectURL(file);
-    setSubmitImage(imageUrl);
+    console.log(file);
+    setSubmitImage(file.name);
+    setShowImage(imageUrl);
   };
 
   const handleInstructionsChange = (e) => {
     setRecipeInstructions(e.target.value);
   };
 
-  const submitRecipe = (e) => {
+  const submitRecipe = async (e) => {
     e.preventDefault();
     const recipeData = {
       recipeName,
@@ -52,6 +56,12 @@ export default function MyListAdd() {
       image: submitImage,
       instructions: recipeInstructions,
     };
+    try {
+      await addDoc(collection(fireStore, "myrecipe"), recipeData);
+      console.log("Recipe added successfully");
+    } catch (error) {
+      console.error("Error adding recipe: ", error);
+    }
     console.log(recipeData);
   };
 
@@ -130,11 +140,11 @@ export default function MyListAdd() {
             <div className={styles.recipe_photo_text_area}>
               <div className={styles.recipe_photo}>
                 <label htmlFor="imgSubmit">
-                  {submitImage.length === 0 && "이미지 등록"}
-                  {submitImage && (
+                  {showImage.length === 0 && "이미지 등록"}
+                  {showImage && (
                     <Image
                       alt="등록이미지"
-                      src={submitImage.toString()}
+                      src={showImage.toString()}
                       className="pre-img"
                       width={400}
                       height={400}
