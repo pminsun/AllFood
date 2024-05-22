@@ -79,8 +79,6 @@ export async function getStaticProps() {
     })
   );
 
-  console.log(urls);
-
   return {
     props: {
       images: urls,

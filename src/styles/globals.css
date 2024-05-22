@@ -85,11 +85,13 @@ li {
   list-style: none;
 }
 input,
-textarea {
+textarea,
+select {
   border: none;
 }
 input:focus,
-textarea:focus {
+textarea:focus,
+select:focus {
   outline: none;
 }
 input:-webkit-autofill {

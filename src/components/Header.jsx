@@ -23,9 +23,11 @@ export default function Header() {
     };
   }, []);
 
+  // logoutModal
   const [logoutModal, setLogoutModal] = useState(false);
   const handleShowLogoutModal = () => {
     setLogoutModal(true);
+    document.body.style.overflow = "hidden";
   };
 
   return (
@@ -77,7 +79,14 @@ export default function Header() {
             </div>
             <p className="modalCon">로그아웃 하시겠습니까?</p>
             <div className="modalBtn_area">
-              <p onClick={() => setLogoutModal(false)}>취소</p>
+              <p
+                onClick={() => {
+                  setLogoutModal(false);
+                  document.body.style.overflow = "auto";
+                }}
+              >
+                취소
+              </p>
               <p onClick={() => signOut({ callbackUrl: `/` })}>확인</p>
             </div>
           </div>

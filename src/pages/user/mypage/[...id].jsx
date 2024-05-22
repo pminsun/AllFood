@@ -29,7 +29,7 @@ export default function MyListDetail({ query }) {
           </p>
         </div>
         <section className={styles.myListDetail_area}>
-          <div>
+          <div className={styles.myListImage_area}>
             <Image
               src={`https://firebasestorage.googleapis.com/v0/b/allfood-ffab0.appspot.com/o/myrecipe%${query.img}`}
               alt="img"
@@ -42,7 +42,10 @@ export default function MyListDetail({ query }) {
               <React.Fragment key={index}>
                 <div className={styles.item_name_area}>
                   <h3>{item.name}</h3>
-                  <p className={styles.tabTitle_btn}>수정</p>
+                  <div className={styles.tabTitle_btn_area}>
+                    <p className={styles.tabTitle_btn}>수정</p>
+                    <p className={styles.tabTitle_btn}>삭제</p>
+                  </div>
                 </div>
                 <div className={styles.ing_area}>
                   <p className={styles.item_sub}>재료</p>
@@ -82,7 +85,6 @@ export default function MyListDetail({ query }) {
 }
 export async function getServerSideProps(context) {
   const { query } = context;
-  console.log(query);
   return {
     props: { query },
   };

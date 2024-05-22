@@ -33,7 +33,7 @@ export default function Login() {
     <section className={`first_content`}>
       <section className="layout_size">
         <div>
-          <h2 className={styles.page_title}>Login</h2>
+          <h2 className={styles.page_title_center}>Login</h2>
         </div>
 
         <form onSubmit={handleSubmit(onValid)} className={styles.login_form}>

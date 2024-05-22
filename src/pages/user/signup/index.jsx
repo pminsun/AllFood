@@ -31,26 +31,12 @@ export default function Signup() {
     <section className={`first_content`}>
       <section className="layout_size">
         <div>
-          <h2 className={styles.page_title}>Sign Up</h2>
+          <h2 className={styles.page_title_center}>Sign Up</h2>
         </div>
         <form
           onSubmit={handleSubmit(signUpAccont)}
           className={styles.login_form}
         >
-          {/* <div>
-            <div className="inputArea">
-              <input
-                type="text"
-                placeholder="name"
-                {...register("name", {
-                  required: "이름은 필수 입력입니다.",
-                })}
-              />
-            </div>
-            {errors.name && (
-              <span className="errorTxt">{errors.name.message}</span>
-            )}
-          </div> */}
           <div>
             <div className="inputArea">
               <input
