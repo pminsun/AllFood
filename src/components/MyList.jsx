@@ -41,7 +41,7 @@ export default function MyList() {
             query: {
               img:
                 urlImage &&
-                urlImage.find((img) => img.includes(item.image)).split("%")[1],
+                urlImage.find((img) => img.includes(item.image))?.split("%")[1],
             },
           }}
           key={index}
@@ -54,9 +54,10 @@ export default function MyList() {
                     <Image
                       key={img}
                       src={img}
-                      alt="pasta"
+                      alt="urlImage"
                       width={208}
                       height={200}
+                      priority
                     />
                   )
               )}

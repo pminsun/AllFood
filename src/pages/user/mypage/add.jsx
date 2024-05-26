@@ -1,18 +1,63 @@
 import styles from "@/styles/User.module.css";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { HiOutlinePlusSm, HiOutlineMinusSm } from "react-icons/hi";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, doc, getDoc, updateDoc } from "firebase/firestore";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { fireStore } from "../../../../firebase/firebasedb";
+import { v4 as uuid } from "uuid";
+import { useRouter } from "next/router";
+import Loading from "@/components/Loading";
 
-export default function MyListAdd() {
+export default function MyListAdd({ query }) {
+  const router = useRouter();
   const [recipeName, setRecipeName] = useState("");
   const [ingredients, setIngredients] = useState([
-    { id: 0, name: "", quantity: "", unit: "단위" },
+    { id: 0, text: "", quantity: "", measure: "단위" },
   ]);
   const [submitImage, setSubmitImage] = useState("");
+  const [submitImageType, setSubmitImageType] = useState("");
   const [showImage, setShowImage] = useState("");
   const [recipeInstructions, setRecipeInstructions] = useState("");
+  const [submitTxt, setSubmitTxt] = useState("추가");
+  const [loading, setLoading] = useState(false);
+
+  // page type
+  const [data, setData] = useState(null);
+  useEffect(() => {
+    if (query.type === "edit" && query.id) {
+      setSubmitTxt("수정");
+      const fetchData = async () => {
+        const docRef = doc(fireStore, "myrecipe", query.id);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          setData(docSnap.data());
+        }
+      };
+
+      fetchData();
+    } else if (query.type === "add") {
+      setSubmitTxt("추가");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (data) {
+      setIngredients(data?.ingredients);
+      setRecipeName(data?.name);
+      setRecipeInstructions(
+        data?.recipe
+          .map((step) => step.replace(/\n/g, "").trim() + ".")
+          .join("\n")
+          .toString()
+      );
+    } else {
+      setIngredients([{ id: 0, text: "", quantity: "", measure: "단위" }]);
+      setRecipeName("");
+      setRecipeInstructions("");
+    }
+  }, [data]);
 
   const handleRecipeName = (e) => {
     setRecipeName(e.target.value);
@@ -21,7 +66,7 @@ export default function MyListAdd() {
   const addIngredient = () => {
     setIngredients([
       ...ingredients,
-      { id: ingredients.length, name: "", quantity: "", unit: "단위" },
+      { id: ingredients.length, text: "", quantity: "", measure: "단위" },
     ]);
   };
 
@@ -36,35 +81,68 @@ export default function MyListAdd() {
     setIngredients(newIngredients);
   };
 
+  // 이미지 show
   const handleChangeFile = (e) => {
     const file = e.target.files[0];
     const imageUrl = URL.createObjectURL(file);
-    console.log(file);
+    setSubmitImageType(file.type);
     setSubmitImage(file.name);
     setShowImage(imageUrl);
   };
 
+  // 레시피 작성
   const handleInstructionsChange = (e) => {
-    setRecipeInstructions(e.target.value);
+    const content = e.target.value;
+    //setRecipeInstructions(content?.split(".")?.filter((n) => n.length > 0));
+    setRecipeInstructions(content.split(".")?.filter((n) => n.length > 0));
   };
 
+  // 레시피 추가
   const submitRecipe = async (e) => {
     e.preventDefault();
-    const recipeData = {
-      recipeName,
-      ingredients,
-      image: submitImage,
-      instructions: recipeInstructions,
+    setLoading(true);
+    const storage = getStorage();
+    const metadata = {
+      contentType: submitImageType,
     };
+
+    const uploadFileName = uuid() + submitImage;
+
     try {
+      if (!submitImage) return;
+
+      const imageRef = ref(storage, `myrecipe/${uploadFileName}`);
+
+      // 파일 내용을 읽습니다
+      const file = document.getElementById("imgSubmit").files[0];
+      if (!file) {
+        console.error("파일이 선택되지 않았습니다");
+        return;
+      }
+
+      // 파일을 업로드하고 업로드가 완료될 때까지 기다립니다
+      await uploadBytes(imageRef, file, metadata);
+      const downloadURL = await getDownloadURL(imageRef);
+
+      // 레시피 데이터를 준비합니다
+      const recipeData = {
+        imageId: uploadFileName,
+        name: recipeName,
+        ingredients,
+        image: downloadURL,
+        recipe: recipeInstructions,
+      };
+
+      // 레시피 데이터를 Firestore에 저장합니다
       await addDoc(collection(fireStore, "myrecipe"), recipeData);
-      console.log("Recipe added successfully");
+      setLoading(false);
+      router.push("/user/mypage");
     } catch (error) {
-      console.error("Error adding recipe: ", error);
+      console.error("레시피 추가 중 오류 발생: ", error);
     }
-    console.log(recipeData);
   };
 
+  // 레시피 재료
   const IngredientInput = ({ ingredient, index }) => {
     const selectList = ["단위", "개", "장", "g", "ml", "L", "컵", "스푼"];
 
@@ -73,9 +151,9 @@ export default function MyListAdd() {
         <div className={styles.ing_add_input_area}>
           <input
             placeholder="재료"
-            value={ingredient.name}
+            value={ingredient.text}
             onChange={(e) =>
-              handleIngredientChange(index, "name", e.target.value)
+              handleIngredientChange(index, "text", e.target.value)
             }
           />
           <input
@@ -87,9 +165,9 @@ export default function MyListAdd() {
           />
           <select
             onChange={(e) =>
-              handleIngredientChange(index, "unit", e.target.value)
+              handleIngredientChange(index, "measure", e.target.value)
             }
-            value={ingredient.unit}
+            value={ingredient.measure}
           >
             {selectList.map((item) => (
               <option value={item} key={item}>
@@ -112,63 +190,121 @@ export default function MyListAdd() {
     );
   };
 
+  // 레시피 업데이트
+  const updateRecipe = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    const storage = getStorage();
+    let downloadURL = data.image; // 기본값으로 기존 이미지 URL 사용
+    const metadata = {
+      contentType: submitImageType,
+    };
+
+    try {
+      if (submitImage) {
+        const uploadFileName = uuid() + submitImage.name;
+        const imageRef = ref(storage, `myrecipe/${uploadFileName}`);
+
+        // 파일을 업로드하고 업로드가 완료될 때까지 기다립니다
+        await uploadBytes(imageRef, submitImage, metadata);
+        downloadURL = await getDownloadURL(imageRef);
+      }
+
+      // 레시피 데이터를 준비합니다
+      const recipeData = {
+        name: recipeName,
+        ingredients,
+        image: downloadURL,
+        recipe: recipeInstructions.split(".").filter((n) => n.length > 0),
+      };
+
+      // 레시피 데이터를 Firestore에 업데이트합니다
+      const docRef = doc(fireStore, "myrecipe", query.id);
+      await updateDoc(docRef, recipeData);
+      setLoading(false);
+      router.push("/user/mypage");
+    } catch (error) {
+      console.error("레시피 업데이트 중 오류 발생: ", error);
+    }
+  };
+
   return (
-    <section className={`first_content`}>
-      <section className="layout_size">
-        <div>
-          <h2 className={styles.page_title}>MY PAGE</h2>
-          <p className={styles.page_info}>
-            나만의 레시피를 AllFood 계정을 통해 기록하세요.
-          </p>
-        </div>
-        <section>
-          <h3 className={styles.add_title}>레시피 추가</h3>
-          <form onSubmit={submitRecipe} className={styles.add_form}>
-            <input
-              className={styles.recipe_name}
-              onChange={handleRecipeName}
-              value={recipeName}
-              placeholder="레시피 이름"
-            />
-            {ingredients.map((ingredient, index) => (
-              <IngredientInput
-                key={ingredient.id}
-                ingredient={ingredient}
-                index={index}
+    <>
+      <section className={`first_content`}>
+        <section className="layout_size">
+          <div>
+            <h2 className={styles.page_title}>MY PAGE</h2>
+            <p className={styles.page_info}>
+              나만의 레시피를 AllFood 계정을 통해 기록하세요.
+            </p>
+          </div>
+          <section>
+            <h3 className={styles.add_title}>레시피 추가</h3>
+            <form
+              onSubmit={submitTxt === "추가" ? submitRecipe : updateRecipe}
+              className={styles.add_form}
+            >
+              <input
+                className={styles.recipe_name}
+                onChange={handleRecipeName}
+                value={recipeName}
+                placeholder="레시피 이름"
               />
-            ))}
-            <div className={styles.recipe_photo_text_area}>
-              <div className={styles.recipe_photo}>
-                <label htmlFor="imgSubmit">
-                  {showImage.length === 0 && "이미지 등록"}
-                  {showImage && (
-                    <Image
-                      alt="등록이미지"
-                      src={showImage.toString()}
-                      className="pre-img"
-                      width={400}
-                      height={400}
-                    />
-                  )}
-                </label>
-                <input
-                  onChange={handleChangeFile}
-                  id="imgSubmit"
-                  type="file"
-                  accept="image/*"
+              {ingredients.map((ingredient, index) => (
+                <IngredientInput
+                  key={ingredient.id}
+                  ingredient={ingredient}
+                  index={index}
                 />
+              ))}
+
+              <div className={styles.recipe_photo_text_area}>
+                <div className={styles.recipe_photo}>
+                  <label htmlFor="imgSubmit">
+                    {!showImage && !data?.image && "이미지 등록"}
+                    {(showImage || data?.image) && (
+                      <Image
+                        alt="등록이미지"
+                        src={data ? data.image : showImage}
+                        className="pre-img"
+                        width={400}
+                        height={400}
+                      />
+                    )}
+                  </label>
+                  <input
+                    onChange={handleChangeFile}
+                    id="imgSubmit"
+                    type="file"
+                    accept="image/*"
+                  />
+                </div>
+                <textarea
+                  className={styles.recipe_text}
+                  onChange={handleInstructionsChange}
+                  value={recipeInstructions}
+                  placeholder={`레시피순서 작성 시 마침표 구분해주세요\n예) 당근, 양파는 잘게 다지고 실파는 송송 썰어주세요.`}
+                ></textarea>
               </div>
-              <textarea
-                className={styles.recipe_text}
-                onChange={handleInstructionsChange}
-                value={recipeInstructions}
-                placeholder={`레시피순서 작성 시 마침표 구분해주세요\n예) 당근, 양파는 잘게 다지고 실파는 송송 썰어주세요.`}
-              ></textarea>
-            </div>
-            <button className={styles.form_add_btn}>추가</button>
-          </form>
+              <button className={styles.form_add_btn}>{submitTxt}</button>
+            </form>
+          </section>
         </section>
       </section>
-    </section>
+      {loading && (
+        <>
+          <div className="loaderBox">
+            <Loading />
+          </div>
+          <div className="modalBox_bg" />
+        </>
+      )}
+    </>
   );
+}
+export async function getServerSideProps(context) {
+  const { query } = context;
+  return {
+    props: { query },
+  };
 }

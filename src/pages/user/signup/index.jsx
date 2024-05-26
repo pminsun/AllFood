@@ -54,6 +54,7 @@ export default function Signup() {
           <div>
             <div className="inputArea">
               <input
+                type="password"
                 //type={showPassword ? "text" : "password"}
                 placeholder="8+ Password"
                 {...register("password", {

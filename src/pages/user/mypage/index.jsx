@@ -6,8 +6,13 @@ import { IoLogOutOutline } from "react-icons/io5";
 import MyList from "@/components/MyList";
 import MyAccount from "@/components/MyAccount";
 import Link from "next/link";
+import { auth } from "../../../../firebase/firebasedb";
+import { useRouter } from "next/router";
+import { deleteUser } from "firebase/auth";
+import { reauthenticate } from "../../../../firebase/reauthenticate";
 
 export default function Mypage() {
+  const router = useRouter();
   const { data: session, status } = useSession();
 
   const tabContent = [
@@ -34,6 +39,25 @@ export default function Mypage() {
   const handleShowLogoutModal = () => {
     setLogoutModal(true);
     document.body.style.overflow = "hidden";
+  };
+
+  // 탈퇴
+  const handleDeleteAccount = async () => {
+    const user = auth.currentUser;
+
+    if (user) {
+      try {
+        await deleteUser(user);
+        alert("계정이 성공적으로 삭제되었습니다.");
+        // 추가로, 사용자가 로그아웃 상태로 돌아가게 할 수 있습니다.
+        router.replace("/");
+      } catch (error) {
+        console.error(
+          "계정 삭제 중 오류가 발생했습니다. 다시 시도해 주세요 ",
+          error
+        );
+      }
+    }
   };
 
   return (
@@ -72,7 +96,12 @@ export default function Mypage() {
                 <div className={styles.tabTitle_btn_area}>
                   {tabContent[tab].titleBtn === "추가" && (
                     <Link
-                      href={"/user/mypage/add"}
+                      href={{
+                        pathname: "/user/mypage/add",
+                        query: {
+                          type: "add",
+                        },
+                      }}
                       className={styles.tabTitle_btn}
                     >
                       {tabContent[tab].titleBtn}
@@ -84,7 +113,10 @@ export default function Mypage() {
                       <p className={styles.tabTitle_btn}>
                         {tabContent[tab].titleBtn}
                       </p>
-                      <p className={styles.tabTitle_btn}>
+                      <p
+                        onClick={handleDeleteAccount}
+                        className={styles.tabTitle_btn}
+                      >
                         {tabContent[tab].titleBtnTwo}
                       </p>
                     </>

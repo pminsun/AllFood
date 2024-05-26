@@ -10,7 +10,6 @@ export default function Login() {
     register,
     handleSubmit,
     setError,
-    setValue,
     formState: { errors, isSubmitting },
   } = useForm();
 
@@ -26,6 +25,14 @@ export default function Login() {
       setError("loginError", {
         message: "아이디와 비밀번호를 다시 확인해주세요.",
       });
+    }
+  };
+  const handleReauthenticate = async () => {
+    try {
+      await reauthenticate(email, password);
+      handleDeleteAccount();
+    } catch (error) {
+      setError("재인증에 실패했습니다. 이메일과 비밀번호를 확인해 주세요.");
     }
   };
 
@@ -54,6 +61,7 @@ export default function Login() {
           <div>
             <div className="inputArea">
               <input
+                type="password"
                 //type={showPassword ? "text" : "password"}
                 placeholder="8+ Password"
                 {...register("password", {

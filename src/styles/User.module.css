@@ -178,6 +178,9 @@
   overflow: hidden;
   border: 2px solid #c6cdc6;
 }
+.myListInfo_area {
+  flex: 1;
+}
 .item_name_area {
   border-bottom: 2px solid #c6cdc6;
   display: flex;
