@@ -1,16 +1,40 @@
 import { useEffect, useState } from "react";
 import styles from "@/styles/User.module.css";
-import { fireStore, fireStorage } from "../../firebase/firebasedb";
+import { fireStore, fireStorage, auth } from "../../firebase/firebasedb";
 import { collection, getDocs } from "firebase/firestore";
 import { ref, listAll, getDownloadURL } from "firebase/storage";
 import Image from "next/image";
 import Link from "next/link";
 
 export default function MyList() {
+  const [load, setLoad] = useState(false);
+  // 현재 로그인 정보
+  const [currentUser, setCurrentUser] = useState(null);
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setCurrentUser(user);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
   const [recipesList, setRecipesList] = useState([]);
   const fetchData = async () => {
-    const querySnapshot = await getDocs(collection(fireStore, "myrecipe"));
-    const data = querySnapshot.docs.map((doc) => doc.data());
+    const querySnapshot = await getDocs(
+      collection(fireStore, `users/${currentUser?.uid}/myrecipes`)
+    );
+
+    const data = querySnapshot.docs
+      .map((doc) => {
+        const recipeData = doc.data();
+        // 만약 recipeData에 created_at 필드가 있다면 제외하고 없는 경우에만 반환
+        if (recipeData.hasOwnProperty("created_at")) {
+          return null;
+        }
+        return recipeData;
+      })
+      .filter((recipe) => recipe !== null);
+
     setRecipesList(data);
   };
 
@@ -28,9 +52,18 @@ export default function MyList() {
   };
 
   useEffect(() => {
-    fetchData();
-    fetchImage();
+    setLoad(true);
   }, []);
+
+  useEffect(() => {
+    const fetchDataAndImage = async () => {
+      await Promise.all([fetchData(), fetchImage()]);
+    };
+
+    if (load) {
+      fetchDataAndImage(); // load 상태가 true이면 fetchDataAndImage 함수를 실행합니다.
+    }
+  }, [load]);
 
   return (
     <div className={styles.myList_area}>
@@ -41,7 +74,12 @@ export default function MyList() {
             query: {
               img:
                 urlImage &&
-                urlImage.find((img) => img.includes(item.image))?.split("%")[1],
+                urlImage
+                  .find(
+                    (img) =>
+                      img.includes(item.image) && img.includes(currentUser?.uid)
+                  )
+                  ?.split("%")[1],
             },
           }}
           key={index}
@@ -50,7 +88,8 @@ export default function MyList() {
             {urlImage &&
               urlImage.map(
                 (img) =>
-                  img.includes(item.image) && (
+                  img.includes(item.image) &&
+                  img.includes(currentUser?.uid) && (
                     <Image
                       key={img}
                       src={img}

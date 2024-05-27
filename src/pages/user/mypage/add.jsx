@@ -4,12 +4,13 @@ import { useEffect, useState } from "react";
 import { HiOutlinePlusSm, HiOutlineMinusSm } from "react-icons/hi";
 import { collection, addDoc, doc, getDoc, updateDoc } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { fireStore } from "../../../../firebase/firebasedb";
+import { auth, fireStore } from "../../../../firebase/firebasedb";
 import { v4 as uuid } from "uuid";
 import { useRouter } from "next/router";
 import Loading from "@/components/Loading";
 
 export default function MyListAdd({ query }) {
+  const [load, setLoad] = useState(false);
   const router = useRouter();
   const [recipeName, setRecipeName] = useState("");
   const [ingredients, setIngredients] = useState([
@@ -22,13 +23,31 @@ export default function MyListAdd({ query }) {
   const [submitTxt, setSubmitTxt] = useState("추가");
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    setLoad(true);
+  }, []);
+
+  // 현재 로그인 정보
+  const [currentUser, setCurrentUser] = useState(null);
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setCurrentUser(user);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
   // page type
   const [data, setData] = useState(null);
   useEffect(() => {
-    if (query.type === "edit" && query.id) {
+    if (query.type === "edit" && query.id && load && currentUser) {
       setSubmitTxt("수정");
       const fetchData = async () => {
-        const docRef = doc(fireStore, "myrecipe", query.id);
+        const docRef = doc(
+          fireStore,
+          `users/${currentUser?.uid}/myrecipes`,
+          query.id
+        );
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
           setData(docSnap.data());
@@ -39,8 +58,7 @@ export default function MyListAdd({ query }) {
     } else if (query.type === "add") {
       setSubmitTxt("추가");
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [load, currentUser]);
 
   useEffect(() => {
     if (data) {
@@ -111,7 +129,10 @@ export default function MyListAdd({ query }) {
     try {
       if (!submitImage) return;
 
-      const imageRef = ref(storage, `myrecipe/${uploadFileName}`);
+      const imageRef = ref(
+        storage,
+        `myrecipe/${currentUser.uid}_${uploadFileName}`
+      );
 
       // 파일 내용을 읽습니다
       const file = document.getElementById("imgSubmit").files[0];
@@ -134,7 +155,10 @@ export default function MyListAdd({ query }) {
       };
 
       // 레시피 데이터를 Firestore에 저장합니다
-      await addDoc(collection(fireStore, "myrecipe"), recipeData);
+      await addDoc(
+        collection(fireStore, `users/${currentUser.uid}/myrecipes`),
+        recipeData
+      );
       setLoading(false);
       router.push("/user/mypage");
     } catch (error) {
@@ -203,7 +227,10 @@ export default function MyListAdd({ query }) {
     try {
       if (submitImage) {
         const uploadFileName = uuid() + submitImage.name;
-        const imageRef = ref(storage, `myrecipe/${uploadFileName}`);
+        const imageRef = ref(
+          storage,
+          `myrecipe/${currentUser.uid}_${uploadFileName}`
+        );
 
         // 파일을 업로드하고 업로드가 완료될 때까지 기다립니다
         await uploadBytes(imageRef, submitImage, metadata);
@@ -219,7 +246,11 @@ export default function MyListAdd({ query }) {
       };
 
       // 레시피 데이터를 Firestore에 업데이트합니다
-      const docRef = doc(fireStore, "myrecipe", query.id);
+      const docRef = doc(
+        fireStore,
+        `users/${currentUser.uid}/myrecipes`,
+        query.id
+      );
       await updateDoc(docRef, recipeData);
       setLoading(false);
       router.push("/user/mypage");

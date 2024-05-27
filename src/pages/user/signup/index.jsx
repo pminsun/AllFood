@@ -2,8 +2,12 @@ import styles from "@/styles/User.module.css";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../../../firebase/firebasedb";
+import { auth, USER_COLLECTION } from "../../../../firebase/firebasedb";
 import { useRouter } from "next/router";
+import { useState } from "react";
+import { FiEye, FiEyeOff } from "react-icons/fi";
+import { setDoc, doc, collection } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 
 export default function Signup() {
   const router = useRouter();
@@ -14,10 +18,32 @@ export default function Signup() {
     formState: { errors, isSubmitting },
   } = useForm();
 
+  const [showPassword, setShowPassword] = useState(false);
+  const clickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
   const signUpAccont = async (data) => {
     try {
-      await createUserWithEmailAndPassword(auth, data.email, data.password);
-      router.replace("/user/login");
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        data.email,
+        data.password
+      );
+      const user = userCredential.user;
+      const userDoc = doc(USER_COLLECTION, user.uid);
+      await setDoc(userDoc, {
+        uid: user.uid,
+        email: data.email,
+        created_at: Date.now(),
+      });
+      const userRecipesCollection = collection(userDoc, "myrecipes");
+      const initialRecipeDoc = doc(userRecipesCollection); // 문서 ID를 자동으로 생성
+      await setDoc(initialRecipeDoc, {
+        created_at: Date.now(),
+      });
+
+      router.push("/user/login");
     } catch (error) {
       if (error.code === "auth/email-already-in-use") {
         setError("useEmail", {
@@ -38,7 +64,7 @@ export default function Signup() {
           className={styles.login_form}
         >
           <div>
-            <div className="inputArea">
+            <div className={styles.inputArea}>
               <input
                 type="text"
                 placeholder="Email"
@@ -52,10 +78,9 @@ export default function Signup() {
             )}
           </div>
           <div>
-            <div className="inputArea">
+            <div className={styles.inputArea}>
               <input
-                type="password"
-                //type={showPassword ? "text" : "password"}
+                type={showPassword ? "text" : "password"}
                 placeholder="8+ Password"
                 {...register("password", {
                   required: "비밀번호는 필수 입력입니다.",
@@ -65,9 +90,9 @@ export default function Signup() {
                   },
                 })}
               />
-              {/* <div className="passwordShow" onClick={clickShowPassword}>
-                  {showPassword ? <FiEye /> : <FiEyeOff />}
-                </div> */}
+              <div className={styles.passwordShow} onClick={clickShowPassword}>
+                {showPassword ? <FiEye /> : <FiEyeOff />}
+              </div>
             </div>
             {errors.password && (
               <span className="errorTxt">{errors.password.message}</span>

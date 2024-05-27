@@ -9,23 +9,45 @@ import Link from "next/link";
 import { auth } from "../../../../firebase/firebasedb";
 import { useRouter } from "next/router";
 import { deleteUser } from "firebase/auth";
-import { reauthenticate } from "../../../../firebase/reauthenticate";
 
 export default function Mypage() {
   const router = useRouter();
   const { data: session, status } = useSession();
 
+  // 탈퇴
+  const handleDeleteAccount = async () => {
+    const user = auth.currentUser;
+
+    if (user) {
+      try {
+        await deleteUser(user);
+        alert("계정이 성공적으로 삭제되었습니다.");
+        await signOut();
+        router.replace("/");
+      } catch (error) {
+        if (error.code === "auth/requires-recent-login") {
+          alert("계정을 삭제하려면 다시 로그인해 주세요.");
+        } else {
+          console.error(
+            "계정 삭제 중 오류가 발생했습니다. 다시 시도해 주세요 ",
+            error
+          );
+        }
+      }
+    }
+  };
+
   const tabContent = [
-    {
-      title: "내 레시피",
-      titleBtn: "추가",
-      content: <MyList />,
-    },
     {
       title: "계정 정보",
       titleBtn: "수정",
       titleBtnTwo: "탈퇴",
-      content: <MyAccount />,
+      content: <MyAccount onReauthenticate={handleDeleteAccount} />,
+    },
+    {
+      title: "내 레시피",
+      titleBtn: "추가",
+      content: <MyList />,
     },
   ];
 
@@ -39,25 +61,6 @@ export default function Mypage() {
   const handleShowLogoutModal = () => {
     setLogoutModal(true);
     document.body.style.overflow = "hidden";
-  };
-
-  // 탈퇴
-  const handleDeleteAccount = async () => {
-    const user = auth.currentUser;
-
-    if (user) {
-      try {
-        await deleteUser(user);
-        alert("계정이 성공적으로 삭제되었습니다.");
-        // 추가로, 사용자가 로그아웃 상태로 돌아가게 할 수 있습니다.
-        router.replace("/");
-      } catch (error) {
-        console.error(
-          "계정 삭제 중 오류가 발생했습니다. 다시 시도해 주세요 ",
-          error
-        );
-      }
-    }
   };
 
   return (
@@ -76,15 +79,14 @@ export default function Mypage() {
                 className={`${tab === 0 ? styles.mymenuSelect : ""}`}
                 onClick={() => selectTabHandler(0)}
               >
-                <HiOutlinePencilAlt /> My Recipes
+                <HiOutlineUser /> My Account
               </p>
               <p
                 className={`${tab === 1 ? styles.mymenuSelect : ""}`}
                 onClick={() => selectTabHandler(1)}
               >
-                <HiOutlineUser /> My Account
+                <HiOutlinePencilAlt /> My Recipes
               </p>
-
               <p onClick={handleShowLogoutModal}>
                 <IoLogOutOutline />
                 Log out

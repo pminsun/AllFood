@@ -3,6 +3,8 @@ import { useForm } from "react-hook-form";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { FiEye, FiEyeOff } from "react-icons/fi";
+import { useState } from "react";
 
 export default function Login() {
   const router = useRouter();
@@ -12,6 +14,11 @@ export default function Login() {
     setError,
     formState: { errors, isSubmitting },
   } = useForm();
+
+  const [showPassword, setShowPassword] = useState(false);
+  const clickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
 
   const onValid = async (data) => {
     const result = await signIn("credentials", {
@@ -45,7 +52,7 @@ export default function Login() {
 
         <form onSubmit={handleSubmit(onValid)} className={styles.login_form}>
           <div>
-            <div className="inputArea">
+            <div className={styles.inputArea}>
               <input
                 type="text"
                 placeholder="Email"
@@ -59,10 +66,9 @@ export default function Login() {
             )}
           </div>
           <div>
-            <div className="inputArea">
+            <div className={styles.inputArea}>
               <input
-                type="password"
-                //type={showPassword ? "text" : "password"}
+                type={showPassword ? "text" : "password"}
                 placeholder="8+ Password"
                 {...register("password", {
                   required: "비밀번호는 필수 입력입니다.",
@@ -72,9 +78,9 @@ export default function Login() {
                   },
                 })}
               />
-              {/* <div className="passwordShow" onClick={clickShowPassword}>
-                  {showPassword ? <FiEye /> : <FiEyeOff />}
-                </div> */}
+              <div className={styles.passwordShow} onClick={clickShowPassword}>
+                {showPassword ? <FiEye /> : <FiEyeOff />}
+              </div>
             </div>
             {errors.password && (
               <span className={styles.errorLogin}>

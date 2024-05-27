@@ -1,35 +1,57 @@
 import styles from "@/styles/User.module.css";
 import Image from "next/image";
-import { fireStore } from "../../../../firebase/firebasedb";
+import { auth, fireStore } from "../../../../firebase/firebasedb";
 import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { deleteObject, ref, getStorage } from "firebase/storage";
 import { useRouter } from "next/router";
 
 export default function MyListDetail({ query }) {
+  const [load, setLoad] = useState(false);
   const router = useRouter();
+  // 현재 로그인 정보
+  const [currentUser, setCurrentUser] = useState(null);
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setCurrentUser(user);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
   const [filteredData, setFilteredData] = useState([]);
   const fetchData = async () => {
-    const querySnapshot = await getDocs(collection(fireStore, "myrecipe"));
+    const querySnapshot = await getDocs(
+      collection(fireStore, `users/${currentUser?.uid}/myrecipes`)
+    );
     const data = querySnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
     }));
     const filtered = data.filter(
-      (item) => item.name.toLowerCase() === query.id[0].toLowerCase()
+      (item) => item.name + "".toLowerCase() === query.id[0].toLowerCase()
     );
     setFilteredData(filtered);
   };
 
   useEffect(() => {
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    setLoad(true);
   }, []);
+
+  useEffect(() => {
+    if (load && currentUser) {
+      fetchData();
+    }
+  }, [load, currentUser]);
+
+  console.log(filteredData);
 
   const handleDelete = async (id, imgPath) => {
     try {
       // Delete the document from Firestore
-      await deleteDoc(doc(fireStore, "myrecipe", id));
+      await deleteDoc(
+        doc(fireStore, `users/${currentUser?.uid}/myrecipes`, id)
+      );
 
       // Delete the image from Firebase Storage
       const storage = getStorage();
@@ -79,7 +101,12 @@ export default function MyListDetail({ query }) {
                         수정
                       </p>
                       <p
-                        onClick={() => handleDelete(item.id, item.imageId)}
+                        onClick={() =>
+                          handleDelete(
+                            item.id,
+                            `${currentUser?.uid}_${item.imageId}`
+                          )
+                        }
                         className={styles.tabTitle_btn}
                       >
                         삭제
