@@ -44,8 +44,6 @@ export default function MyListDetail({ query }) {
     }
   }, [load, currentUser]);
 
-  console.log(filteredData);
-
   const handleDelete = async (id, imgPath) => {
     try {
       // Delete the document from Firestore

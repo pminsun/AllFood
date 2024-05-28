@@ -12,9 +12,13 @@ export default function Mypage() {
   const router = useRouter();
   const { data: session, status } = useSession();
   const [showDeleteAccount, setShowDeleteAccount] = useState(false);
+  const [showUpdateAccount, setShowUpdateAccount] = useState(false);
 
   const handleDeleteAccountModal = () => {
     setShowDeleteAccount(true);
+  };
+  const handleUpdateAccountModal = () => {
+    setShowUpdateAccount(true);
   };
 
   const tabContent = [
@@ -26,6 +30,8 @@ export default function Mypage() {
         <MyAccount
           showDeleteAccount={showDeleteAccount}
           setShowDeleteAccount={setShowDeleteAccount}
+          showUpdateAccount={showUpdateAccount}
+          setShowUpdateAccount={setShowUpdateAccount}
         />
       ),
     },
@@ -68,7 +74,11 @@ export default function Mypage() {
               </p>
               <p
                 className={`${tab === 1 ? styles.mymenuSelect : ""}`}
-                onClick={() => selectTabHandler(1)}
+                onClick={() => {
+                  selectTabHandler(1);
+                  setShowDeleteAccount(false);
+                  setShowUpdateAccount(false);
+                }}
               >
                 <HiOutlinePencilAlt /> My Recipes
               </p>
@@ -97,7 +107,10 @@ export default function Mypage() {
 
                   {tabContent[tab].titleBtnTwo && (
                     <>
-                      <p className={styles.tabTitle_btn}>
+                      <p
+                        onClick={handleUpdateAccountModal}
+                        className={styles.tabTitle_btn}
+                      >
                         {tabContent[tab].titleBtn}
                       </p>
                       <p
