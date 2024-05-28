@@ -6,35 +6,15 @@ import { IoLogOutOutline } from "react-icons/io5";
 import MyList from "@/components/MyList";
 import MyAccount from "@/components/MyAccount";
 import Link from "next/link";
-import { auth } from "../../../../firebase/firebasedb";
 import { useRouter } from "next/router";
-import { deleteUser } from "firebase/auth";
 
 export default function Mypage() {
   const router = useRouter();
   const { data: session, status } = useSession();
+  const [showDeleteAccount, setShowDeleteAccount] = useState(false);
 
-  // 탈퇴
-  const handleDeleteAccount = async () => {
-    const user = auth.currentUser;
-
-    if (user) {
-      try {
-        await deleteUser(user);
-        alert("계정이 성공적으로 삭제되었습니다.");
-        await signOut();
-        router.replace("/");
-      } catch (error) {
-        if (error.code === "auth/requires-recent-login") {
-          alert("계정을 삭제하려면 다시 로그인해 주세요.");
-        } else {
-          console.error(
-            "계정 삭제 중 오류가 발생했습니다. 다시 시도해 주세요 ",
-            error
-          );
-        }
-      }
-    }
+  const handleDeleteAccountModal = () => {
+    setShowDeleteAccount(true);
   };
 
   const tabContent = [
@@ -42,7 +22,12 @@ export default function Mypage() {
       title: "계정 정보",
       titleBtn: "수정",
       titleBtnTwo: "탈퇴",
-      content: <MyAccount onReauthenticate={handleDeleteAccount} />,
+      content: (
+        <MyAccount
+          showDeleteAccount={showDeleteAccount}
+          setShowDeleteAccount={setShowDeleteAccount}
+        />
+      ),
     },
     {
       title: "내 레시피",
@@ -116,7 +101,7 @@ export default function Mypage() {
                         {tabContent[tab].titleBtn}
                       </p>
                       <p
-                        onClick={handleDeleteAccount}
+                        onClick={handleDeleteAccountModal}
                         className={styles.tabTitle_btn}
                       >
                         {tabContent[tab].titleBtnTwo}

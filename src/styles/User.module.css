@@ -173,10 +173,32 @@
   font-size: 18px;
 }
 .myAccount_box input {
+  width: 100%;
   padding: 14px 10px;
   font-size: 18px;
   border: 2px solid #c6cdc6;
+  background-color: transparent;
 }
+.recheck_area {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.recheck {
+  width: 152px;
+  padding: 10px 20px;
+  font-size: 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  background-color: #c6cdc6;
+  transition: all 0.2s;
+}
+.recheck:hover {
+  background-color: #adb4ad;
+}
+
+/*  */
 .myListDetail_area {
   display: flex;
   gap: 80px;
