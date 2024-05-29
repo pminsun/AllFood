@@ -96,7 +96,6 @@ export default function MyList() {
                       alt="urlImage"
                       width={208}
                       height={200}
-                      priority
                     />
                   )
               )}

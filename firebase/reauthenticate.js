@@ -1,18 +1,6 @@
 import { auth } from "./firebasedb";
 import { EmailAuthProvider, reauthenticateWithCredential } from "firebase/auth";
 
-// export const reauthenticate = async (email, password) => {
-//   const user = auth.currentUser;
-//   const credential = EmailAuthProvider.credential(email, password);
-
-//   try {
-//     await reauthenticateWithCredential(user, credential);
-//     return true;
-//   } catch (error) {
-//     console.error("Reauthentication failed:", error);
-//     throw error;
-//   }
-// };
 export const reauthenticate = async (email, password) => {
   const user = auth.currentUser;
 

@@ -151,6 +151,8 @@ export default function Home() {
                   alt="pasta"
                   width={500}
                   height={540}
+                  placeholder="blur"
+                  blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFklEQVR42mN8//HLfwYiAOOoQvoqBABbWyZJf74GZgAAAABJRU5ErkJggg=="
                 />
               </div>
               <div className="list_name">
@@ -175,6 +177,8 @@ export default function Home() {
                   alt="pork"
                   width={500}
                   height={540}
+                  placeholder="blur"
+                  blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFklEQVR42mN8//HLfwYiAOOoQvoqBABbWyZJf74GZgAAAABJRU5ErkJggg=="
                 />
               </div>
               <div className="list_name">
@@ -199,7 +203,8 @@ export default function Home() {
                   alt="egg"
                   width={500}
                   height={540}
-                  priority
+                  placeholder="blur"
+                  blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFklEQVR42mN8//HLfwYiAOOoQvoqBABbWyZJf74GZgAAAABJRU5ErkJggg=="
                 />
               </div>
               <div className="list_name">
@@ -246,7 +251,6 @@ export default function Home() {
                 alt="egg"
                 width={450}
                 height={450}
-                priority
               />
             )}
           </div>
