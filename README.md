@@ -1,40 +1,135 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## 레시피 검색 저장 웹
 
-## Getting Started
+<!-- Table of Contents -->
 
-First, run the development server:
+## :notebook_with_decorative_cover: 목차
+
+- [About the Project](#star2-about-the-project)
+  - [AllFood Screenshots](#camera-개인-블로그-screenshots)
+  - [Tech Stack](#space_invader-tech-stack)
+  - [웹사이트 특징](#dart-블로그-특징)
+  - [주요 색상](#art-주요-색상)
+  - [Environment Variables](#key-environment-variables)
+- [개발 Roadmap](#compass-개발-roadmap)
+- [Getting Started](#toolbox-getting-started)
+  - [Running Dev](#test_tube-running-tests)
+  - [Deployment](#triangular_flag_on_post-deployment)
+- [License](#warning-license)
+- [Contact](#handshake-contact)
+
+<!-- About the Project -->
+
+## :star2: About the Project
+
+<h3>AllFood</h3>
+<p>해당 프로젝트는 Edamam api / firebase / OpenWeather api / Youtube api를 활용해서 만든 Next.js 웹페이지입니다.</p>
+
+<!-- Screenshots -->
+
+### :camera: AllFood Screenshots
+
+<div align="center"> 
+  <img width="1280" alt="blogcapture" src="https://github.com/pminsun/AllFood/assets/125803499/4e039086-ead4-4a39-88ae-1cbe343cd4cb" alt="screenshot">
+</div>
+
+<!-- TechStack -->
+
+### :space_invader: Tech Stack
+
+<p>기술스택</p>
+
+- Javascript
+- Next.js
+- React.js
+
+<p>사용한 메인 라이브러리</p>
+
+- react-apexcharts v1.4
+- react-query v5.35
+- zustand v4.5
+
+<!-- Features -->
+
+### :dart: 블로그 특징
+
+- Edamam api로 식재료, 음식에 대한 레시피정보, 영양소 정보 검색 데이터를 Next.js로 제작 후 EC2로 배포한 웹사이트입니다.
+- firebase를 활용해 로그인, 회원가입이 가능하며 계정 별 개인 레시피 정보를 생성, 수정 삭제 할 수 있습니다.
+- OpenWeather api를 활용해 오늘 날씨에 어울리는 음식을 추천합니다.
+- Youtube api를 활용해 음식 관련 유명 유투버의 구독자, 영상 수와 최신 영상을 보여줍니다.
+
+<!-- Color Reference -->
+
+### :art: 주요 색상
+
+| LightColor    | Hex                                                              |
+| ------------- | ---------------------------------------------------------------- |
+| Primary Color | ![#f6f9f7](https://via.placeholder.com/10/f6f9f7?text=+) #f6f9f7 |
+| Accent Color  | ![#c6cdc6](https://via.placeholder.com/10/c6cdc6?text=+) #c6cdc6 |
+| Text Color    | ![#000000](https://via.placeholder.com/10/000000?text=+) #000000 |
+
+<!-- Env Variables -->
+
+### :key: Environment Variables
+
+<p>사용된 환경 설정</p>
+
+`NEXT_PUBLIC_APP_ID`
+`NEXT_PUBLIC_APP_KEY`
+`NEXT_PUBLIC_NUTRITION_APP_ID`
+`NEXT_PUBLIC_NUTRITION_APP_KEY`
+`NEXT_PUBLIC_YOUTUBE_APP_KEY`
+`NEXTAUTH_SECRET`
+`NEXT_PUBLIC_OPENWEATHER_APP_ID`
+
+`NEXT_PUBLIC_FIREBASE_API_KEY`
+`NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN`
+`NEXT_PUBLIC_PROJECT_ID`
+`NEXT_PUBLIC_STORAGE_BUCKET`
+`NEXT_PUBLIC_MESSAGING_SENDER_ID`
+`NEXT_PUBLIC_APP_ID`
+`NEXT_PUBLIC_MEASURMENT_ID`
+
+<!-- Roadmap -->
+
+## :compass: 개발 Roadmap
+
+- [x] 홈페이지 - lottieAny 적용
+- [ ] 상세페이지 - 이미지 클릭 시 크게 보이는 모달
+- [ ] 공통 - 페이지 이동 속도 개선
+
+<!-- Getting Started -->
+
+## :toolbox: Getting Started
+
+<!-- Running Tests -->
+
+### :test_tube: Running Dev
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+  npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+<!-- Deployment -->
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+### :triangular_flag_on_post: Deployment
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+To deploy this project run
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+```bash
+  npm run build
+  npm start
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+<!-- License -->
 
-## Learn More
+## :warning: License
 
-To learn more about Next.js, take a look at the following resources:
+MIT 라이센스에 따라 배포됩니다. 자세한 내용은 LICENSE 을 확인하세요
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+<!-- Contact -->
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## :handshake: Contact
 
-## Deploy on Vercel
+박민선(Minsun Park) - pminsun309@gmail.com
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Project Link: [https://minsunblog.com/](https://minsunblog.com/)
