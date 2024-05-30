@@ -22,7 +22,7 @@
 ## :star2: About the Project
 
 <h3>AllFood</h3>
-<p>해당 프로젝트는 Edamam api / firebase / OpenWeather api / Youtube api를 활용해서 만든 Next.js 웹페이지입니다.</p>
+<p>해당 프로젝트는 Edamam api / firebase / OpenWeather api / Youtube api를 활용해서 만든 Next.js 웹사이트입니다.</p>
 <p>테스트 아이디 : user@test.com | 테스트 비번 : test1234!@</p>
 
 <!-- Screenshots -->
@@ -141,4 +141,4 @@ MIT 라이센스에 따라 배포됩니다. 자세한 내용은 LICENSE 을 확�
 
 박민선(Minsun Park) - pminsun309@gmail.com
 
-Project Link: [https://minsunblog.com/](https://minsunblog.com/)
+Project Link: [https://allfood-38lr7fg9i-pminsuns-projects.vercel.app/](https://allfood-38lr7fg9i-pminsuns-projects.vercel.app/)
