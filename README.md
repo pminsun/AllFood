@@ -23,6 +23,7 @@
 
 <h3>AllFood</h3>
 <p>해당 프로젝트는 Edamam api / firebase / OpenWeather api / Youtube api를 활용해서 만든 Next.js 웹페이지입니다.</p>
+<p>테스트 아이디 : user@test.com | 테스트 비번 : test1234!@</p>
 
 <!-- Screenshots -->
 
@@ -93,9 +94,17 @@
 
 ## :compass: 개발 Roadmap
 
-- [x] 홈페이지 - lottieAny 적용
-- [ ] 상세페이지 - 이미지 클릭 시 크게 보이는 모달
-- [ ] 공통 - 페이지 이동 속도 개선
+- [x] 홈페이지 - Edamam api 활용한 검색창 (query로 검색어 전달)
+- [x] 홈페이지 -OpenWeather api 활용해 오늘 날씨에 어울리는 추천음식, 멘트
+- [x] 홈페이지 - Youtube api를 활용해 유명 유투버의 구독자, 영상 수와 최신 영상
+- [x] 홈페이지 - 하단 lottieAny 적용
+- [x] NUTRITION 페이지 - Edamam api 활용한 영양성분 검색시 그래프 도출
+- [x] RECIPES 페이지 - Edamam api 활용한 검색시 총 건수, 리스트
+- [x] 로그인 / 회원가입 페이지 - firebase auth 연동
+- [x] 모달 - 로그아웃
+- [x] 마이페이지 - My Account / My Recipes 탭 구현
+- [x] 마이페이지 - 계정 탈퇴 / 계정 비밀번호 수정
+- [x] 마이페이지 - My Recipes 추가
 
 <!-- Getting Started -->
 
