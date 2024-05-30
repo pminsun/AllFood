@@ -9,6 +9,71 @@ import { v4 as uuid } from "uuid";
 import { useRouter } from "next/router";
 import Loading from "@/components/Loading";
 
+// 레시피 재료
+const IngredientInput = ({
+  ingredient,
+  index,
+  handleIngredientChange,
+  addIngredient,
+  removeIngredient,
+}) => {
+  const selectList = [
+    "단위",
+    "개",
+    "장",
+    "g",
+    "ml",
+    "L",
+    "컵",
+    "스푼",
+    "큰술",
+    "작은술",
+  ];
+
+  return (
+    <div className={styles.ing_add_area} key={ingredient.id}>
+      <div className={styles.ing_add_input_area}>
+        <input
+          placeholder="재료"
+          value={ingredient.text}
+          onChange={(e) =>
+            handleIngredientChange(index, "text", e.target.value)
+          }
+        />
+        <input
+          placeholder="양"
+          value={ingredient.quantity}
+          onChange={(e) =>
+            handleIngredientChange(index, "quantity", e.target.value)
+          }
+        />
+        <select
+          onChange={(e) =>
+            handleIngredientChange(index, "measure", e.target.value)
+          }
+          value={ingredient.measure}
+        >
+          {selectList.map((item) => (
+            <option value={item} key={item}>
+              {item}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div className={styles.ing_add_btn}>
+        <button type="button" onClick={addIngredient}>
+          <HiOutlinePlusSm />
+        </button>
+        {index !== 0 && (
+          <button type="button" onClick={() => removeIngredient(index)}>
+            <HiOutlineMinusSm />
+          </button>
+        )}
+      </div>
+    </div>
+  );
+};
+
 export default function MyListAdd({ query }) {
   const [load, setLoad] = useState(false);
   const router = useRouter();
@@ -58,18 +123,13 @@ export default function MyListAdd({ query }) {
     } else if (query.type === "add") {
       setSubmitTxt("추가");
     }
-  }, [load, currentUser]);
+  }, [load, currentUser, query.type, query.id]);
 
   useEffect(() => {
     if (data) {
       setIngredients(data?.ingredients);
       setRecipeName(data?.name);
-      setRecipeInstructions(
-        data?.recipe
-          .map((step) => step.replace(/\n/g, "").trim() + ".")
-          .join("\n")
-          .toString()
-      );
+      setRecipeInstructions(data?.recipe);
     } else {
       setIngredients([{ id: 0, text: "", quantity: "", measure: "단위" }]);
       setRecipeName("");
@@ -92,9 +152,11 @@ export default function MyListAdd({ query }) {
     setIngredients(ingredients.filter((_, i) => i !== index));
   };
 
-  const handleIngredientChange = (index, field, value) => {
+  const handleIngredientChange = (fiedlIndex, field, value) => {
     const newIngredients = ingredients.map((ingredient, i) =>
-      i === index ? { ...ingredient, [field]: value } : ingredient
+      ingredient.id === fiedlIndex
+        ? { ...ingredient, [field]: value }
+        : ingredient
     );
     setIngredients(newIngredients);
   };
@@ -111,8 +173,7 @@ export default function MyListAdd({ query }) {
   // 레시피 작성
   const handleInstructionsChange = (e) => {
     const content = e.target.value;
-    //setRecipeInstructions(content?.split(".")?.filter((n) => n.length > 0));
-    setRecipeInstructions(content.split(".")?.filter((n) => n.length > 0));
+    setRecipeInstructions(content);
   };
 
   // 레시피 추가
@@ -166,54 +227,6 @@ export default function MyListAdd({ query }) {
     }
   };
 
-  // 레시피 재료
-  const IngredientInput = ({ ingredient, index }) => {
-    const selectList = ["단위", "개", "장", "g", "ml", "L", "컵", "스푼"];
-
-    return (
-      <div className={styles.ing_add_area} key={index}>
-        <div className={styles.ing_add_input_area}>
-          <input
-            placeholder="재료"
-            value={ingredient.text}
-            onChange={(e) =>
-              handleIngredientChange(index, "text", e.target.value)
-            }
-          />
-          <input
-            placeholder="양"
-            value={ingredient.quantity}
-            onChange={(e) =>
-              handleIngredientChange(index, "quantity", e.target.value)
-            }
-          />
-          <select
-            onChange={(e) =>
-              handleIngredientChange(index, "measure", e.target.value)
-            }
-            value={ingredient.measure}
-          >
-            {selectList.map((item) => (
-              <option value={item} key={item}>
-                {item}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className={styles.ing_add_btn}>
-          <button type="button" onClick={addIngredient}>
-            <HiOutlinePlusSm />
-          </button>
-          {index !== 0 && (
-            <button type="button" onClick={() => removeIngredient(index)}>
-              <HiOutlineMinusSm />
-            </button>
-          )}
-        </div>
-      </div>
-    );
-  };
-
   // 레시피 업데이트
   const updateRecipe = async (e) => {
     e.preventDefault();
@@ -242,7 +255,7 @@ export default function MyListAdd({ query }) {
         name: recipeName,
         ingredients,
         image: downloadURL,
-        recipe: recipeInstructions.split(".").filter((n) => n.length > 0),
+        recipe: recipeInstructions,
       };
 
       // 레시피 데이터를 Firestore에 업데이트합니다
@@ -286,6 +299,9 @@ export default function MyListAdd({ query }) {
                   key={ingredient.id}
                   ingredient={ingredient}
                   index={index}
+                  handleIngredientChange={handleIngredientChange}
+                  addIngredient={addIngredient}
+                  removeIngredient={removeIngredient}
                 />
               ))}
 

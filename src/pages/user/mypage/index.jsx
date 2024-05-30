@@ -16,9 +16,11 @@ export default function Mypage() {
 
   const handleDeleteAccountModal = () => {
     setShowDeleteAccount(true);
+    setShowUpdateAccount(false);
   };
   const handleUpdateAccountModal = () => {
     setShowUpdateAccount(true);
+    setShowDeleteAccount(false);
   };
 
   const tabContent = [

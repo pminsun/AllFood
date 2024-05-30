@@ -42,6 +42,7 @@ export default function MyListDetail({ query }) {
     if (load && currentUser) {
       fetchData();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [load, currentUser]);
 
   const handleDelete = async (id, imgPath) => {
@@ -61,7 +62,6 @@ export default function MyListDetail({ query }) {
       console.error("Error deleting the recipe: ", error);
     }
   };
-
   return (
     <>
       <section className={`first_content`}>
@@ -129,14 +129,23 @@ export default function MyListDetail({ query }) {
                   <div className={styles.reci_area}>
                     <p className={styles.item_sub}>레시피</p>
                     <ul className={styles.reci_list_area}>
-                      {item.recipe?.map((reci, index) => (
-                        <li key={index + "recipe"} className={styles.reci_list}>
-                          <p>
-                            <span>{index + 1}.</span>
-                            {reci}
-                          </p>
-                        </li>
-                      ))}
+                      {item &&
+                        item.recipe
+                          ?.split(".")
+                          ?.filter((n) => n.length > 0)
+                          .map((str) => str.replace(/\n/g, ""))
+
+                          .map((reci, index) => (
+                            <li
+                              key={index + "recipe"}
+                              className={styles.reci_list}
+                            >
+                              <p>
+                                <span>{index + 1}.</span>
+                                {reci}
+                              </p>
+                            </li>
+                          ))}
                     </ul>
                   </div>
                 </React.Fragment>

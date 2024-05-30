@@ -240,6 +240,7 @@
   display: flex;
   align-items: center;
   gap: 16px;
+  flex-wrap: wrap;
 }
 .reci_area {
   display: flex;
@@ -254,7 +255,7 @@
 }
 .reci_list p {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 10px;
   font-size: 18px;
 }
