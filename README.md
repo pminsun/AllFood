@@ -141,4 +141,4 @@ MIT 라이센스에 따라 배포됩니다. 자세한 내용은 LICENSE 을 확�
 
 박민선(Minsun Park) - pminsun309@gmail.com
 
-Project Link: [https://allfood-38lr7fg9i-pminsuns-projects.vercel.app/](https://allfood-38lr7fg9i-pminsuns-projects.vercel.app/)
+Project Link: [https://www.myallfood.com/](https://www.myallfood.com/)
