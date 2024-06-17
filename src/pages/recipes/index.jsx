@@ -119,7 +119,7 @@ export default function Recipes({ query }) {
           <>
             <section className={styles.recipes}>
               {recipesList?.map((recipe, index) => (
-                <List key={recipe.recipe.labe} recipe={recipe} />
+                <List key={recipe.recipe.label + index} recipe={recipe} />
               ))}
             </section>
             <section className={styles.pagination}>
