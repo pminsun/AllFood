@@ -4,10 +4,6 @@ import styles from "@/styles/Header.module.css";
 import { signOut, useSession } from "next-auth/react";
 
 export default function Header() {
-  const url =
-    process.env.NODE_ENV === "production"
-      ? `https://campaign.veloga.co.kr`
-      : `http://localhost:3000`;
   const { data: session, status } = useSession();
 
   const [scrollPosition, setScrollPosition] = useState(0);
