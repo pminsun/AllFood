@@ -1,33 +1,33 @@
-import { signOut, useSession } from "next-auth/react";
-import styles from "@/styles/User.module.css";
-import { useState } from "react";
-import { HiOutlineUser, HiOutlinePencilAlt } from "react-icons/hi";
-import { IoLogOutOutline } from "react-icons/io5";
-import MyList from "@/components/MyList";
-import MyAccount from "@/components/MyAccount";
-import Link from "next/link";
-import { useRouter } from "next/router";
+import { signOut, useSession } from 'next-auth/react'
+import styles from '@/styles/User.module.css'
+import { useState } from 'react'
+import { HiOutlineUser, HiOutlinePencilAlt } from 'react-icons/hi'
+import { IoLogOutOutline } from 'react-icons/io5'
+import MyList from '@/components/MyList'
+import MyAccount from '@/components/MyAccount'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 export default function Mypage() {
-  const router = useRouter();
-  const { data: session, status } = useSession();
-  const [showDeleteAccount, setShowDeleteAccount] = useState(false);
-  const [showUpdateAccount, setShowUpdateAccount] = useState(false);
+  const router = useRouter()
+  const { data: session, status } = useSession()
+  const [showDeleteAccount, setShowDeleteAccount] = useState(false)
+  const [showUpdateAccount, setShowUpdateAccount] = useState(false)
 
   const handleDeleteAccountModal = () => {
-    setShowDeleteAccount(true);
-    setShowUpdateAccount(false);
-  };
+    setShowDeleteAccount(true)
+    setShowUpdateAccount(false)
+  }
   const handleUpdateAccountModal = () => {
-    setShowUpdateAccount(true);
-    setShowDeleteAccount(false);
-  };
+    setShowUpdateAccount(true)
+    setShowDeleteAccount(false)
+  }
 
   const tabContent = [
     {
-      title: "계정 정보",
-      titleBtn: "수정",
-      titleBtnTwo: "탈퇴",
+      title: '계정 정보',
+      titleBtn: '수정',
+      titleBtnTwo: '탈퇴',
       content: (
         <MyAccount
           showDeleteAccount={showDeleteAccount}
@@ -38,23 +38,23 @@ export default function Mypage() {
       ),
     },
     {
-      title: "내 레시피",
-      titleBtn: "추가",
+      title: '내 레시피',
+      titleBtn: '추가',
       content: <MyList />,
     },
-  ];
+  ]
 
-  const [tab, setTab] = useState(0);
+  const [tab, setTab] = useState(0)
   const selectTabHandler = (index) => {
-    setTab(index);
-  };
+    setTab(index)
+  }
 
   // logoutModal
-  const [logoutModal, setLogoutModal] = useState(false);
+  const [logoutModal, setLogoutModal] = useState(false)
   const handleShowLogoutModal = () => {
-    setLogoutModal(true);
-    document.body.style.overflow = "hidden";
-  };
+    setLogoutModal(true)
+    document.body.style.overflow = 'hidden'
+  }
 
   return (
     <>
@@ -69,17 +69,17 @@ export default function Mypage() {
           <section className={styles.mypageArea}>
             <div className={styles.mymenu}>
               <p
-                className={`${tab === 0 ? styles.mymenuSelect : ""}`}
+                className={`${tab === 0 ? styles.mymenuSelect : ''}`}
                 onClick={() => selectTabHandler(0)}
               >
                 <HiOutlineUser /> My Account
               </p>
               <p
-                className={`${tab === 1 ? styles.mymenuSelect : ""}`}
+                className={`${tab === 1 ? styles.mymenuSelect : ''}`}
                 onClick={() => {
-                  selectTabHandler(1);
-                  setShowDeleteAccount(false);
-                  setShowUpdateAccount(false);
+                  selectTabHandler(1)
+                  setShowDeleteAccount(false)
+                  setShowUpdateAccount(false)
                 }}
               >
                 <HiOutlinePencilAlt /> My Recipes
@@ -93,12 +93,12 @@ export default function Mypage() {
               <div className={styles.tabTitle}>
                 <p>{tabContent[tab].title}</p>
                 <div className={styles.tabTitle_btn_area}>
-                  {tabContent[tab].titleBtn === "추가" && (
+                  {tabContent[tab].titleBtn === '추가' && (
                     <Link
                       href={{
-                        pathname: "/user/mypage/add",
+                        pathname: '/user/mypage/add',
                         query: {
-                          type: "add",
+                          type: 'add',
                         },
                       }}
                       className={styles.tabTitle_btn}
@@ -140,8 +140,8 @@ export default function Mypage() {
             <div className="modalBtn_area">
               <p
                 onClick={() => {
-                  setLogoutModal(false);
-                  document.body.style.overflow = "auto";
+                  setLogoutModal(false)
+                  document.body.style.overflow = 'auto'
                 }}
               >
                 취소
@@ -153,5 +153,5 @@ export default function Mypage() {
         </>
       )}
     </>
-  );
+  )
 }

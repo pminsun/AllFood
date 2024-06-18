@@ -1,13 +1,13 @@
-import styles from "@/styles/User.module.css";
-import Image from "next/image";
-import { useEffect, useState } from "react";
-import { HiOutlinePlusSm, HiOutlineMinusSm } from "react-icons/hi";
-import { collection, addDoc, doc, getDoc, updateDoc } from "firebase/firestore";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { auth, fireStore } from "../../../../firebase/firebasedb";
-import { v4 as uuid } from "uuid";
-import { useRouter } from "next/router";
-import Loading from "@/components/Loading";
+import styles from '@/styles/User.module.css'
+import Image from 'next/image'
+import { useEffect, useState } from 'react'
+import { HiOutlinePlusSm, HiOutlineMinusSm } from 'react-icons/hi'
+import { collection, addDoc, doc, getDoc, updateDoc } from 'firebase/firestore'
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'
+import { auth, fireStore } from '../../../../firebase/firebasedb'
+import { v4 as uuid } from 'uuid'
+import { useRouter } from 'next/router'
+import Loading from '@/components/Loading'
 
 // 레시피 재료
 const IngredientInput = ({
@@ -18,17 +18,17 @@ const IngredientInput = ({
   removeIngredient,
 }) => {
   const selectList = [
-    "단위",
-    "개",
-    "장",
-    "g",
-    "ml",
-    "L",
-    "컵",
-    "스푼",
-    "큰술",
-    "작은술",
-  ];
+    '단위',
+    '개',
+    '장',
+    'g',
+    'ml',
+    'L',
+    '컵',
+    '스푼',
+    '큰술',
+    '작은술',
+  ]
 
   return (
     <div className={styles.ing_add_area} key={ingredient.id}>
@@ -37,19 +37,19 @@ const IngredientInput = ({
           placeholder="재료"
           value={ingredient.text}
           onChange={(e) =>
-            handleIngredientChange(index, "text", e.target.value)
+            handleIngredientChange(index, 'text', e.target.value)
           }
         />
         <input
           placeholder="양"
           value={ingredient.quantity}
           onChange={(e) =>
-            handleIngredientChange(index, "quantity", e.target.value)
+            handleIngredientChange(index, 'quantity', e.target.value)
           }
         />
         <select
           onChange={(e) =>
-            handleIngredientChange(index, "measure", e.target.value)
+            handleIngredientChange(index, 'measure', e.target.value)
           }
           value={ingredient.measure}
         >
@@ -71,140 +71,140 @@ const IngredientInput = ({
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
 export default function MyListAdd({ query }) {
-  const [load, setLoad] = useState(false);
-  const router = useRouter();
-  const [recipeName, setRecipeName] = useState("");
+  const [load, setLoad] = useState(false)
+  const router = useRouter()
+  const [recipeName, setRecipeName] = useState('')
   const [ingredients, setIngredients] = useState([
-    { id: 0, text: "", quantity: "", measure: "단위" },
-  ]);
-  const [submitImage, setSubmitImage] = useState("");
-  const [submitImageType, setSubmitImageType] = useState("");
-  const [showImage, setShowImage] = useState("");
-  const [recipeInstructions, setRecipeInstructions] = useState("");
-  const [submitTxt, setSubmitTxt] = useState("추가");
-  const [loading, setLoading] = useState(false);
+    { id: 0, text: '', quantity: '', measure: '단위' },
+  ])
+  const [submitImage, setSubmitImage] = useState('')
+  const [submitImageType, setSubmitImageType] = useState('')
+  const [showImage, setShowImage] = useState('')
+  const [recipeInstructions, setRecipeInstructions] = useState('')
+  const [submitTxt, setSubmitTxt] = useState('추가')
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    setLoad(true);
-  }, []);
+    setLoad(true)
+  }, [])
 
   // 현재 로그인 정보
-  const [currentUser, setCurrentUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null)
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
-      setCurrentUser(user);
-    });
+      setCurrentUser(user)
+    })
 
-    return () => unsubscribe();
-  }, []);
+    return () => unsubscribe()
+  }, [])
 
   // page type
-  const [data, setData] = useState(null);
+  const [data, setData] = useState(null)
   useEffect(() => {
-    if (query.type === "edit" && query.id && load && currentUser) {
-      setSubmitTxt("수정");
+    if (query.type === 'edit' && query.id && load && currentUser) {
+      setSubmitTxt('수정')
       const fetchData = async () => {
         const docRef = doc(
           fireStore,
           `users/${currentUser?.uid}/myrecipes`,
-          query.id
-        );
-        const docSnap = await getDoc(docRef);
+          query.id,
+        )
+        const docSnap = await getDoc(docRef)
         if (docSnap.exists()) {
-          setData(docSnap.data());
+          setData(docSnap.data())
         }
-      };
+      }
 
-      fetchData();
-    } else if (query.type === "add") {
-      setSubmitTxt("추가");
+      fetchData()
+    } else if (query.type === 'add') {
+      setSubmitTxt('추가')
     }
-  }, [load, currentUser, query.type, query.id]);
+  }, [load, currentUser, query.type, query.id])
 
   useEffect(() => {
     if (data) {
-      setIngredients(data?.ingredients);
-      setRecipeName(data?.name);
-      setRecipeInstructions(data?.recipe);
+      setIngredients(data?.ingredients)
+      setRecipeName(data?.name)
+      setRecipeInstructions(data?.recipe)
     } else {
-      setIngredients([{ id: 0, text: "", quantity: "", measure: "단위" }]);
-      setRecipeName("");
-      setRecipeInstructions("");
+      setIngredients([{ id: 0, text: '', quantity: '', measure: '단위' }])
+      setRecipeName('')
+      setRecipeInstructions('')
     }
-  }, [data]);
+  }, [data])
 
   const handleRecipeName = (e) => {
-    setRecipeName(e.target.value);
-  };
+    setRecipeName(e.target.value)
+  }
 
   const addIngredient = () => {
     setIngredients([
       ...ingredients,
-      { id: ingredients.length, text: "", quantity: "", measure: "단위" },
-    ]);
-  };
+      { id: ingredients.length, text: '', quantity: '', measure: '단위' },
+    ])
+  }
 
   const removeIngredient = (index) => {
-    setIngredients(ingredients.filter((_, i) => i !== index));
-  };
+    setIngredients(ingredients.filter((_, i) => i !== index))
+  }
 
   const handleIngredientChange = (fiedlIndex, field, value) => {
     const newIngredients = ingredients.map((ingredient, i) =>
       ingredient.id === fiedlIndex
         ? { ...ingredient, [field]: value }
-        : ingredient
-    );
-    setIngredients(newIngredients);
-  };
+        : ingredient,
+    )
+    setIngredients(newIngredients)
+  }
 
   // 이미지 show
   const handleChangeFile = (e) => {
-    const file = e.target.files[0];
-    const imageUrl = URL.createObjectURL(file);
-    setSubmitImageType(file.type);
-    setSubmitImage(file.name);
-    setShowImage(imageUrl);
-  };
+    const file = e.target.files[0]
+    const imageUrl = URL.createObjectURL(file)
+    setSubmitImageType(file.type)
+    setSubmitImage(file.name)
+    setShowImage(imageUrl)
+  }
 
   // 레시피 작성
   const handleInstructionsChange = (e) => {
-    const content = e.target.value;
-    setRecipeInstructions(content);
-  };
+    const content = e.target.value
+    setRecipeInstructions(content)
+  }
 
   // 레시피 추가
   const submitRecipe = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    const storage = getStorage();
+    e.preventDefault()
+    setLoading(true)
+    const storage = getStorage()
     const metadata = {
       contentType: submitImageType,
-    };
+    }
 
-    const uploadFileName = uuid() + submitImage;
+    const uploadFileName = uuid() + submitImage
 
     try {
-      if (!submitImage) return;
+      if (!submitImage) return
 
       const imageRef = ref(
         storage,
-        `myrecipe/${currentUser.uid}_${uploadFileName}`
-      );
+        `myrecipe/${currentUser.uid}_${uploadFileName}`,
+      )
 
       // 파일 내용을 읽습니다
-      const file = document.getElementById("imgSubmit").files[0];
+      const file = document.getElementById('imgSubmit').files[0]
       if (!file) {
-        console.error("파일이 선택되지 않았습니다");
-        return;
+        console.error('파일이 선택되지 않았습니다')
+        return
       }
 
       // 파일을 업로드하고 업로드가 완료될 때까지 기다립니다
-      await uploadBytes(imageRef, file, metadata);
-      const downloadURL = await getDownloadURL(imageRef);
+      await uploadBytes(imageRef, file, metadata)
+      const downloadURL = await getDownloadURL(imageRef)
 
       // 레시피 데이터를 준비합니다
       const recipeData = {
@@ -213,41 +213,41 @@ export default function MyListAdd({ query }) {
         ingredients,
         image: downloadURL,
         recipe: recipeInstructions,
-      };
+      }
 
       // 레시피 데이터를 Firestore에 저장합니다
       await addDoc(
         collection(fireStore, `users/${currentUser.uid}/myrecipes`),
-        recipeData
-      );
-      setLoading(false);
-      router.push("/user/mypage");
+        recipeData,
+      )
+      setLoading(false)
+      router.push('/user/mypage')
     } catch (error) {
-      console.error("레시피 추가 중 오류 발생: ", error);
+      console.error('레시피 추가 중 오류 발생: ', error)
     }
-  };
+  }
 
   // 레시피 업데이트
   const updateRecipe = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    const storage = getStorage();
-    let downloadURL = data.image; // 기본값으로 기존 이미지 URL 사용
+    e.preventDefault()
+    setLoading(true)
+    const storage = getStorage()
+    let downloadURL = data.image // 기본값으로 기존 이미지 URL 사용
     const metadata = {
       contentType: submitImageType,
-    };
+    }
 
     try {
       if (submitImage) {
-        const uploadFileName = uuid() + submitImage.name;
+        const uploadFileName = uuid() + submitImage.name
         const imageRef = ref(
           storage,
-          `myrecipe/${currentUser.uid}_${uploadFileName}`
-        );
+          `myrecipe/${currentUser.uid}_${uploadFileName}`,
+        )
 
         // 파일을 업로드하고 업로드가 완료될 때까지 기다립니다
-        await uploadBytes(imageRef, submitImage, metadata);
-        downloadURL = await getDownloadURL(imageRef);
+        await uploadBytes(imageRef, submitImage, metadata)
+        downloadURL = await getDownloadURL(imageRef)
       }
 
       // 레시피 데이터를 준비합니다
@@ -256,21 +256,21 @@ export default function MyListAdd({ query }) {
         ingredients,
         image: downloadURL,
         recipe: recipeInstructions,
-      };
+      }
 
       // 레시피 데이터를 Firestore에 업데이트합니다
       const docRef = doc(
         fireStore,
         `users/${currentUser.uid}/myrecipes`,
-        query.id
-      );
-      await updateDoc(docRef, recipeData);
-      setLoading(false);
-      router.push("/user/mypage");
+        query.id,
+      )
+      await updateDoc(docRef, recipeData)
+      setLoading(false)
+      router.push('/user/mypage')
     } catch (error) {
-      console.error("레시피 업데이트 중 오류 발생: ", error);
+      console.error('레시피 업데이트 중 오류 발생: ', error)
     }
-  };
+  }
 
   return (
     <>
@@ -285,7 +285,7 @@ export default function MyListAdd({ query }) {
           <section>
             <h3 className={styles.add_title}>레시피 추가</h3>
             <form
-              onSubmit={submitTxt === "추가" ? submitRecipe : updateRecipe}
+              onSubmit={submitTxt === '추가' ? submitRecipe : updateRecipe}
               className={styles.add_form}
             >
               <input
@@ -308,7 +308,7 @@ export default function MyListAdd({ query }) {
               <div className={styles.recipe_photo_text_area}>
                 <div className={styles.recipe_photo}>
                   <label htmlFor="imgSubmit">
-                    {!showImage && !data?.image && "이미지 등록"}
+                    {!showImage && !data?.image && '이미지 등록'}
                     {(showImage || data?.image) && (
                       <Image
                         alt="등록이미지"
@@ -347,11 +347,11 @@ export default function MyListAdd({ query }) {
         </>
       )}
     </>
-  );
+  )
 }
 export async function getServerSideProps(context) {
-  const { query } = context;
+  const { query } = context
   return {
     props: { query },
-  };
+  }
 }

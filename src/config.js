@@ -1,7 +1,7 @@
 export const dateFormat = (date) => {
-  return date?.split("T")[0].replaceAll("-", ".");
-};
+  return date?.split('T')[0].replaceAll('-', '.')
+}
 
 export const commaThousand = (num) => {
-  return num?.toLocaleString("ko-KR");
-};
+  return num?.toLocaleString('ko-KR')
+}

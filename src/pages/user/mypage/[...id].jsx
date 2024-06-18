@@ -1,67 +1,65 @@
-import styles from "@/styles/User.module.css";
-import Image from "next/image";
-import { auth, fireStore } from "../../../../firebase/firebasedb";
-import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
-import { deleteObject, ref, getStorage } from "firebase/storage";
-import { useRouter } from "next/router";
+import styles from '@/styles/User.module.css'
+import Image from 'next/image'
+import { auth, fireStore } from '../../../../firebase/firebasedb'
+import { collection, deleteDoc, doc, getDocs } from 'firebase/firestore'
+import React, { useEffect, useState } from 'react'
+import { deleteObject, ref, getStorage } from 'firebase/storage'
+import { useRouter } from 'next/router'
 
 export default function MyListDetail({ query }) {
-  const [load, setLoad] = useState(false);
-  const router = useRouter();
+  const [load, setLoad] = useState(false)
+  const router = useRouter()
   // 현재 로그인 정보
-  const [currentUser, setCurrentUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null)
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
-      setCurrentUser(user);
-    });
+      setCurrentUser(user)
+    })
 
-    return () => unsubscribe();
-  }, []);
+    return () => unsubscribe()
+  }, [])
 
-  const [filteredData, setFilteredData] = useState([]);
+  const [filteredData, setFilteredData] = useState([])
   const fetchData = async () => {
     const querySnapshot = await getDocs(
-      collection(fireStore, `users/${currentUser?.uid}/myrecipes`)
-    );
+      collection(fireStore, `users/${currentUser?.uid}/myrecipes`),
+    )
     const data = querySnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
-    }));
+    }))
     const filtered = data.filter(
-      (item) => item.name + "".toLowerCase() === query.id[0].toLowerCase()
-    );
-    setFilteredData(filtered);
-  };
+      (item) => item.name + ''.toLowerCase() === query.id[0].toLowerCase(),
+    )
+    setFilteredData(filtered)
+  }
 
   useEffect(() => {
-    setLoad(true);
-  }, []);
+    setLoad(true)
+  }, [])
 
   useEffect(() => {
     if (load && currentUser) {
-      fetchData();
+      fetchData()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [load, currentUser]);
+  }, [load, currentUser])
 
   const handleDelete = async (id, imgPath) => {
     try {
       // Delete the document from Firestore
-      await deleteDoc(
-        doc(fireStore, `users/${currentUser?.uid}/myrecipes`, id)
-      );
+      await deleteDoc(doc(fireStore, `users/${currentUser?.uid}/myrecipes`, id))
 
       // Delete the image from Firebase Storage
-      const storage = getStorage();
-      const imgRef = ref(storage, `myrecipe/${imgPath}`);
-      await deleteObject(imgRef);
+      const storage = getStorage()
+      const imgRef = ref(storage, `myrecipe/${imgPath}`)
+      await deleteObject(imgRef)
 
-      router.push("/user/mypage");
+      router.push('/user/mypage')
     } catch (error) {
-      console.error("Error deleting the recipe: ", error);
+      console.error('Error deleting the recipe: ', error)
     }
-  };
+  }
   return (
     <>
       <section className={`first_content`}>
@@ -90,8 +88,8 @@ export default function MyListDetail({ query }) {
                       <p
                         onClick={() =>
                           router.push({
-                            pathname: "/user/mypage/add",
-                            query: { type: "edit", id: item.id },
+                            pathname: '/user/mypage/add',
+                            query: { type: 'edit', id: item.id },
                           })
                         }
                         className={styles.tabTitle_btn}
@@ -102,7 +100,7 @@ export default function MyListDetail({ query }) {
                         onClick={() =>
                           handleDelete(
                             item.id,
-                            `${currentUser?.uid}_${item.imageId}`
+                            `${currentUser?.uid}_${item.imageId}`,
                           )
                         }
                         className={styles.tabTitle_btn}
@@ -115,7 +113,7 @@ export default function MyListDetail({ query }) {
                     <p className={styles.item_sub}>재료</p>
                     <ul className={styles.ing_list_area}>
                       {item.ingredients.map((ing, index) => (
-                        <li key={index + "ing"} className={styles.item_list}>
+                        <li key={index + 'ing'} className={styles.item_list}>
                           <span>{ing.text}</span>
                           <div>
                             <span>{ing.quantity}</span>
@@ -131,13 +129,13 @@ export default function MyListDetail({ query }) {
                     <ul className={styles.reci_list_area}>
                       {item &&
                         item.recipe
-                          ?.split(".")
+                          ?.split('.')
                           ?.filter((n) => n.length > 0)
-                          .map((str) => str.replace(/\n/g, ""))
+                          .map((str) => str.replace(/\n/g, ''))
 
                           .map((reci, index) => (
                             <li
-                              key={index + "recipe"}
+                              key={index + 'recipe'}
                               className={styles.reci_list}
                             >
                               <p>
@@ -155,11 +153,11 @@ export default function MyListDetail({ query }) {
         </section>
       </section>
     </>
-  );
+  )
 }
 export async function getServerSideProps(context) {
-  const { query } = context;
+  const { query } = context
   return {
     props: { query },
-  };
+  }
 }

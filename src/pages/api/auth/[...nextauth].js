@@ -1,7 +1,7 @@
-import NextAuth from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
-import { initializeApp, getApps } from "firebase/app";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import NextAuth from 'next-auth'
+import CredentialsProvider from 'next-auth/providers/credentials'
+import { initializeApp, getApps } from 'firebase/app'
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -11,39 +11,39 @@ const firebaseConfig = {
   messagingSenderId: process.env.NEXT_PUBLIC_MESSAGING_SENDER_ID,
   appId: process.env.NEXT_PUBLIC_APP_ID,
   measurementId: process.env.NEXT_PUBLIC_MEASURMENT_ID,
-};
-
-if (!getApps().length) {
-  initializeApp(firebaseConfig);
 }
 
-const auth = getAuth();
+if (!getApps().length) {
+  initializeApp(firebaseConfig)
+}
+
+const auth = getAuth()
 
 export default NextAuth({
   providers: [
     CredentialsProvider({
-      name: "Firebase",
+      name: 'Firebase',
       credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" },
+        email: { label: 'Email', type: 'email' },
+        password: { label: 'Password', type: 'password' },
       },
       authorize: async (credentials) => {
         try {
           const userCredential = await signInWithEmailAndPassword(
             auth,
             credentials.email,
-            credentials.password
-          );
-          const user = userCredential.user;
+            credentials.password,
+          )
+          const user = userCredential.user
 
           if (user) {
-            return { id: user.uid, email: user.email };
+            return { id: user.uid, email: user.email }
           }
         } catch (error) {
-          console.error(error);
+          console.error(error)
         }
-        return null;
+        return null
       },
     }),
   ],
-});
+})

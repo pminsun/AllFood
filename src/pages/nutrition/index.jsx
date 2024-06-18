@@ -1,50 +1,48 @@
-import Loading from "@/components/Loading";
-import styles from "@/styles/Nutrition.module.css";
-import dynamic from "next/dynamic";
-import { useState } from "react";
-const ApexCharts = dynamic(() => import("react-apexcharts"), { ssr: false });
+import Loading from '@/components/Loading'
+import styles from '@/styles/Nutrition.module.css'
+import dynamic from 'next/dynamic'
+import { useState } from 'react'
+const ApexCharts = dynamic(() => import('react-apexcharts'), { ssr: false })
 
 export default function Nutrition() {
-  const [nutritionTxt, setNutritionTxt] = useState("");
-  const [nutritionData, setNutritionData] = useState(null);
-  const [analysisLoading, setAnalysisLoading] = useState(false);
+  const [nutritionTxt, setNutritionTxt] = useState('')
+  const [nutritionData, setNutritionData] = useState(null)
+  const [analysisLoading, setAnalysisLoading] = useState(false)
 
   const InputNutritionTxt = (e) => {
-    setNutritionTxt(e.target.value);
-  };
+    setNutritionTxt(e.target.value)
+  }
 
   const nutritionDataFetch = async (nutritionTxt) => {
-    setAnalysisLoading(true);
-    const ingredientsArray = nutritionTxt
-      .split(",")
-      .filter((n) => n.length > 0);
+    setAnalysisLoading(true)
+    const ingredientsArray = nutritionTxt.split(',').filter((n) => n.length > 0)
     const response = await fetch(
       `https://api.edamam.com/api/nutrition-details?app_id=${process.env.NEXT_PUBLIC_NUTRITION_APP_ID}&app_key=${process.env.NEXT_PUBLIC_NUTRITION_APP_KEY}`,
       {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json", // JSON 형식으로 요청을 보냄
+          'Content-Type': 'application/json', // JSON 형식으로 요청을 보냄
         },
         body: JSON.stringify({
           ingr: ingredientsArray,
         }),
-      }
-    );
-    const data = await response.json();
-    return data;
-  };
+      },
+    )
+    const data = await response.json()
+    return data
+  }
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
+    event.preventDefault()
 
     if (nutritionTxt.length > 0) {
-      const data = await nutritionDataFetch(nutritionTxt);
-      setNutritionData(data);
-      setAnalysisLoading(false);
+      const data = await nutritionDataFetch(nutritionTxt)
+      setNutritionData(data)
+      setAnalysisLoading(false)
     }
-  };
+  }
 
-  const roundedNumber = (number) => number.toFixed(1);
+  const roundedNumber = (number) => number.toFixed(1)
 
   // 차트
   const state = {
@@ -57,60 +55,60 @@ export default function Nutrition() {
           roundedNumber(nutritionData.totalDaily.PROCNT.quantity),
         ]
       : [0, 0, 0, 0, 0],
-  };
+  }
   const commonOptions = {
     plotOptions: {
       radialBar: {
         hollow: {
-          size: "58%",
+          size: '58%',
         },
         dataLabels: {
           name: {
-            fontSize: "20px",
+            fontSize: '20px',
           },
           value: {
-            fontSize: "16px",
+            fontSize: '16px',
           },
         },
       },
     },
     stroke: {
-      lineCap: "round",
+      lineCap: 'round',
     },
-  };
+  }
 
   const options = {
     ...commonOptions,
     chart: {
       height: 400,
-      type: "radialBar",
+      type: 'radialBar',
     },
-    colors: ["#ddbf5c", "#88dd4e", "#75d1d8", "#8a9dd1", "#c6a8e2"],
-    labels: ["총 지방", "콜레스테롤", "나트륨", "총 탄수화물", "단백질"],
-  };
+    colors: ['#ddbf5c', '#88dd4e', '#75d1d8', '#8a9dd1', '#c6a8e2'],
+    labels: ['총 지방', '콜레스테롤', '나트륨', '총 탄수화물', '단백질'],
+  }
 
-  const stateNone = { series: [0, 0, 0, 0, 0] };
+  const stateNone = { series: [0, 0, 0, 0, 0] }
   const optionsNone = {
     plotOptions: {
       radialBar: {
         hollow: {
-          size: "58%",
+          size: '58%',
         },
         dataLabels: {
-          showOn: "none",
+          showOn: 'none',
         },
       },
     },
     stroke: {
-      lineCap: "round",
+      lineCap: 'round',
     },
     chart: {
       height: 400,
-      type: "radialBar",
+      type: 'radialBar',
     },
-    colors: ["#ddbf5c", "#88dd4e", "#75d1d8", "#8a9dd1", "#c6a8e2"],
-    labels: ["총 지방", "콜레스테롤", "나트륨", "총 탄수화물", "단백질"],
-  };
+    colors: ['#ddbf5c', '#88dd4e', '#75d1d8', '#8a9dd1', '#c6a8e2'],
+    labels: ['총 지방', '콜레스테롤', '나트륨', '총 탄수화물', '단백질'],
+  }
 
   return (
     <>
@@ -182,8 +180,8 @@ export default function Nutrition() {
                     <p>
                       {nutritionData !== null
                         ? roundedNumber(nutritionData.totalDaily.FAT.quantity) +
-                          "%"
-                        : ""}
+                          '%'
+                        : ''}
                     </p>
                   </div>
                   <div>
@@ -192,9 +190,9 @@ export default function Nutrition() {
                     <p>
                       {nutritionData !== null
                         ? roundedNumber(
-                            nutritionData.totalDaily.CHOLE.quantity
-                          ) + "%"
-                        : ""}
+                            nutritionData.totalDaily.CHOLE.quantity,
+                          ) + '%'
+                        : ''}
                     </p>
                   </div>
                   <div>
@@ -203,8 +201,8 @@ export default function Nutrition() {
                     <p>
                       {nutritionData !== null
                         ? roundedNumber(nutritionData.totalDaily.NA.quantity) +
-                          "%"
-                        : ""}
+                          '%'
+                        : ''}
                     </p>
                   </div>
                   <div>
@@ -213,9 +211,9 @@ export default function Nutrition() {
                     <p>
                       {nutritionData !== null
                         ? roundedNumber(
-                            nutritionData.totalDaily.CHOCDF.quantity
-                          ) + "%"
-                        : ""}
+                            nutritionData.totalDaily.CHOCDF.quantity,
+                          ) + '%'
+                        : ''}
                     </p>
                   </div>
                   <div>
@@ -224,9 +222,9 @@ export default function Nutrition() {
                     <p>
                       {nutritionData !== null
                         ? roundedNumber(
-                            nutritionData.totalDaily.PROCNT.quantity
+                            nutritionData.totalDaily.PROCNT.quantity,
                           )
-                        : ""}
+                        : ''}
                     </p>
                   </div>
                 </div>
@@ -253,8 +251,8 @@ export default function Nutrition() {
                       <td>{ingri.parsed[0].food}</td>
                       <td>
                         {roundedNumber(
-                          ingri.parsed[0].nutrients.ENERC_KCAL.quantity
-                        )}{" "}
+                          ingri.parsed[0].nutrients.ENERC_KCAL.quantity,
+                        )}{' '}
                         {ingri.parsed[0].nutrients.ENERC_KCAL.unit}
                       </td>
                       <td>{roundedNumber(ingri.parsed[0].weight)} g</td>
@@ -273,5 +271,5 @@ export default function Nutrition() {
         </section>
       </section>
     </>
-  );
+  )
 }

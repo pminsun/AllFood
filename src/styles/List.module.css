@@ -6,11 +6,11 @@
 .recipe_name h2 {
   font-size: 42px;
   text-transform: uppercase;
-  font-family: "Poetsen One", sans-serif;
+  font-family: 'Poetsen One', sans-serif;
 }
 .recipe_name p {
   font-size: 28px;
-  font-family: "Poetsen One", sans-serif;
+  font-family: 'Poetsen One', sans-serif;
 }
 .recipe_name p span {
   font-size: 18px;
@@ -80,7 +80,7 @@
 }
 .recipes > a :global(.item_name) {
   width: 100%;
-  font-family: "Poetsen One", sans-serif;
+  font-family: 'Poetsen One', sans-serif;
   font-size: 22px;
 }
 .noneRecipes {

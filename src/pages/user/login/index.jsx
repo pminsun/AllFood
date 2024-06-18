@@ -1,47 +1,47 @@
-import styles from "@/styles/User.module.css";
-import { useForm } from "react-hook-form";
-import { signIn } from "next-auth/react";
-import { useRouter } from "next/router";
-import Link from "next/link";
-import { FiEye, FiEyeOff } from "react-icons/fi";
-import { useState } from "react";
+import styles from '@/styles/User.module.css'
+import { useForm } from 'react-hook-form'
+import { signIn } from 'next-auth/react'
+import { useRouter } from 'next/router'
+import Link from 'next/link'
+import { FiEye, FiEyeOff } from 'react-icons/fi'
+import { useState } from 'react'
 
 export default function Login() {
-  const router = useRouter();
+  const router = useRouter()
   const {
     register,
     handleSubmit,
     setError,
     formState: { errors, isSubmitting },
-  } = useForm();
+  } = useForm()
 
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false)
   const clickShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
+    setShowPassword(!showPassword)
+  }
 
   const onValid = async (data) => {
-    const result = await signIn("credentials", {
+    const result = await signIn('credentials', {
       redirect: false,
       email: data.email,
       password: data.password,
-    });
+    })
     if (!result?.error) {
-      router.replace("/");
+      router.replace('/')
     } else {
-      setError("loginError", {
-        message: "아이디와 비밀번호를 다시 확인해주세요.",
-      });
+      setError('loginError', {
+        message: '아이디와 비밀번호를 다시 확인해주세요.',
+      })
     }
-  };
+  }
   const handleReauthenticate = async () => {
     try {
-      await reauthenticate(email, password);
-      handleDeleteAccount();
+      await reauthenticate(email, password)
+      handleDeleteAccount()
     } catch (error) {
-      setError("재인증에 실패했습니다. 이메일과 비밀번호를 확인해 주세요.");
+      setError('재인증에 실패했습니다. 이메일과 비밀번호를 확인해 주세요.')
     }
-  };
+  }
 
   return (
     <section className={`first_content`}>
@@ -56,8 +56,8 @@ export default function Login() {
               <input
                 type="text"
                 placeholder="Email"
-                {...register("email", {
-                  required: "아이디는 필수 입력입니다.",
+                {...register('email', {
+                  required: '아이디는 필수 입력입니다.',
                 })}
               />
             </div>
@@ -68,13 +68,13 @@ export default function Login() {
           <div>
             <div className={styles.inputArea}>
               <input
-                type={showPassword ? "text" : "password"}
+                type={showPassword ? 'text' : 'password'}
                 placeholder="8+ Password"
-                {...register("password", {
-                  required: "비밀번호는 필수 입력입니다.",
+                {...register('password', {
+                  required: '비밀번호는 필수 입력입니다.',
                   minLength: {
                     value: 8,
-                    message: "8자리 이상 비밀번호를 입력하세요.",
+                    message: '8자리 이상 비밀번호를 입력하세요.',
                   },
                 })}
               />
@@ -99,7 +99,7 @@ export default function Login() {
                 <label htmlFor="rememberId">계정정보 저장하기</label>
               </div>
             </div> */}
-          <p {...register("loginError")}>
+          <p {...register('loginError')}>
             {errors.loginError && (
               <span className={styles.errorLogin}>
                 {errors.loginError.message}
@@ -114,10 +114,10 @@ export default function Login() {
             로그인
           </button>
         </form>
-        <Link href={"/user/signup"} className={styles.moveTo_signUp}>
+        <Link href={'/user/signup'} className={styles.moveTo_signUp}>
           회원가입 하러 가기
         </Link>
       </section>
     </section>
-  );
+  )
 }

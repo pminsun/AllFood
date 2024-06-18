@@ -47,7 +47,6 @@
 
 - react-apexcharts v1.4
 - react-query v5.35
-- zustand v4.5
 
 <!-- Features -->
 

@@ -4,11 +4,11 @@ const nextConfig = {
   swcMinify: true,
   images: {
     domains: [
-      "edamam-product-images.s3.amazonaws.com",
-      "i.ytimg.com",
-      "firebasestorage.googleapis.com",
+      'edamam-product-images.s3.amazonaws.com',
+      'i.ytimg.com',
+      'firebasestorage.googleapis.com',
     ],
   },
-};
+}
 
-module.exports = nextConfig;
+module.exports = nextConfig

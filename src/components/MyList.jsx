@@ -1,69 +1,69 @@
-import { useEffect, useState } from "react";
-import styles from "@/styles/User.module.css";
-import { fireStore, fireStorage, auth } from "../../firebase/firebasedb";
-import { collection, getDocs } from "firebase/firestore";
-import { ref, listAll, getDownloadURL } from "firebase/storage";
-import Image from "next/image";
-import Link from "next/link";
+import { useEffect, useState } from 'react'
+import styles from '@/styles/User.module.css'
+import { fireStore, fireStorage, auth } from '../../firebase/firebasedb'
+import { collection, getDocs } from 'firebase/firestore'
+import { ref, listAll, getDownloadURL } from 'firebase/storage'
+import Image from 'next/image'
+import Link from 'next/link'
 
 export default function MyList() {
-  const [load, setLoad] = useState(false);
+  const [load, setLoad] = useState(false)
   // 현재 로그인 정보
-  const [currentUser, setCurrentUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null)
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
-      setCurrentUser(user);
-    });
+      setCurrentUser(user)
+    })
 
-    return () => unsubscribe();
-  }, []);
+    return () => unsubscribe()
+  }, [])
 
-  const [recipesList, setRecipesList] = useState([]);
+  const [recipesList, setRecipesList] = useState([])
   const fetchData = async () => {
     const querySnapshot = await getDocs(
-      collection(fireStore, `users/${currentUser?.uid}/myrecipes`)
-    );
+      collection(fireStore, `users/${currentUser?.uid}/myrecipes`),
+    )
 
     const data = querySnapshot.docs
       .map((doc) => {
-        const recipeData = doc.data();
+        const recipeData = doc.data()
         // 만약 recipeData에 created_at 필드가 있다면 제외하고 없는 경우에만 반환
-        if (recipeData.hasOwnProperty("created_at")) {
-          return null;
+        if (recipeData.hasOwnProperty('created_at')) {
+          return null
         }
-        return recipeData;
+        return recipeData
       })
-      .filter((recipe) => recipe !== null);
+      .filter((recipe) => recipe !== null)
 
-    setRecipesList(data);
-  };
+    setRecipesList(data)
+  }
 
-  const [urlImage, setUrlImage] = useState("");
+  const [urlImage, setUrlImage] = useState('')
   const fetchImage = async () => {
-    const fileRef = ref(fireStorage, "myrecipe/");
-    const result = await listAll(fileRef);
+    const fileRef = ref(fireStorage, 'myrecipe/')
+    const result = await listAll(fileRef)
     const urls = await Promise.all(
       result.items.map(async (item) => {
-        const url = await getDownloadURL(item);
-        return url;
-      })
-    );
-    setUrlImage(urls);
-  };
+        const url = await getDownloadURL(item)
+        return url
+      }),
+    )
+    setUrlImage(urls)
+  }
 
   useEffect(() => {
-    setLoad(true);
-  }, []);
+    setLoad(true)
+  }, [])
 
   useEffect(() => {
     const fetchDataAndImage = async () => {
-      await Promise.all([fetchData(), fetchImage()]);
-    };
+      await Promise.all([fetchData(), fetchImage()])
+    }
 
     if (load) {
-      fetchDataAndImage(); // load 상태가 true이면 fetchDataAndImage 함수를 실행합니다.
+      fetchDataAndImage() // load 상태가 true이면 fetchDataAndImage 함수를 실행합니다.
     }
-  }, [load]);
+  }, [load])
 
   return (
     <div className={styles.myList_area}>
@@ -77,9 +77,10 @@ export default function MyList() {
                 urlImage
                   .find(
                     (img) =>
-                      img.includes(item.image) && img.includes(currentUser?.uid)
+                      img.includes(item.image) &&
+                      img.includes(currentUser?.uid),
                   )
-                  ?.split("%")[1],
+                  ?.split('%')[1],
             },
           }}
           key={index}
@@ -97,30 +98,30 @@ export default function MyList() {
                       width={208}
                       height={200}
                     />
-                  )
+                  ),
               )}
           </div>
           <p className={styles.item_name}>{item.name}</p>
         </Link>
       ))}
     </div>
-  );
+  )
 }
 
 export async function getStaticProps() {
-  const fileRef = ref(fireStorage, "coverImage/");
+  const fileRef = ref(fireStorage, 'coverImage/')
   // coverImage/ 하위에 있는 모든 파일에 대한 참조
-  const result = await listAll(fileRef);
+  const result = await listAll(fileRef)
   const urls = await Promise.all(
     result.items.map(async (item) => {
-      const url = await getDownloadURL(item);
-      return url;
-    })
-  );
+      const url = await getDownloadURL(item)
+      return url
+    }),
+  )
 
   return {
     props: {
       images: urls,
     },
-  };
+  }
 }

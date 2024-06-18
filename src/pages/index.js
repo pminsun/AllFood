@@ -1,109 +1,109 @@
-import Image from "next/image";
-import Link from "next/link";
-import styles from "@/styles/Home.module.css";
-import { HiArrowRight } from "react-icons/hi";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { useQueries, useQuery } from "@tanstack/react-query";
-import { commaThousand, dateFormat } from "@/config";
-import Lottie from "react-lottie-player";
-import nutritionCheck from "../../public/ani/nutrition_check.json";
-import { weatherFood } from "../../lib/weatherFood";
+import Image from 'next/image'
+import Link from 'next/link'
+import styles from '@/styles/Home.module.css'
+import { HiArrowRight } from 'react-icons/hi'
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { useQueries, useQuery } from '@tanstack/react-query'
+import { commaThousand, dateFormat } from '@/config'
+import Lottie from 'react-lottie-player'
+import nutritionCheck from '../../public/ani/nutrition_check.json'
+import { weatherFood } from '../../lib/weatherFood'
 
 export default function Home() {
-  const router = useRouter();
-  const [searchTxt, setSearchTxt] = useState("");
+  const router = useRouter()
+  const [searchTxt, setSearchTxt] = useState('')
   const moveToRecipes = (food) => {
     return () => {
       router.push({
-        pathname: "/recipes",
+        pathname: '/recipes',
         query: { food: food },
-      });
-    };
-  };
+      })
+    }
+  }
 
   // mainCookingYoutuber - 최신동영상
   const { data: mainVideo } = useQuery({
-    queryKey: ["firstYoutubeVideo"],
+    queryKey: ['firstYoutubeVideo'],
     queryFn: () =>
       fetch(
-        `https://www.googleapis.com/youtube/v3/playlistItems?key=${process.env.NEXT_PUBLIC_YOUTUBE_APP_KEY}&part=snippet,contentDetails,id&playlistId=PLoABXt5mipg6mIdGKBuJlv5tmQFAQ3OYr&maxResults=1`
+        `https://www.googleapis.com/youtube/v3/playlistItems?key=${process.env.NEXT_PUBLIC_YOUTUBE_APP_KEY}&part=snippet,contentDetails,id&playlistId=PLoABXt5mipg6mIdGKBuJlv5tmQFAQ3OYr&maxResults=1`,
       ).then((res) => res.json()),
-  });
+  })
 
   // mainCookingYoutuber - 구독수, 동영상 수
   const channelsList = [
-    { id: "UCyn-K7rZLXjGl7VXGweIlcA" },
-    { id: "UCFiYPUhUzLKoi-cZ0AwpjLA" },
-    { id: "UCPWFxcwPliEBMwJjmeFIDIg" },
-    { id: "UCC8bTxyN2ZCfMzS_JAEClfA" },
-  ];
+    { id: 'UCyn-K7rZLXjGl7VXGweIlcA' },
+    { id: 'UCFiYPUhUzLKoi-cZ0AwpjLA' },
+    { id: 'UCPWFxcwPliEBMwJjmeFIDIg' },
+    { id: 'UCC8bTxyN2ZCfMzS_JAEClfA' },
+  ]
 
   const fetchChannelData = async ({ id, regionCode }) => {
     const res = await fetch(
-      `https://youtube.googleapis.com/youtube/v3/channels?part=statistics&id=${id}&regionCode=KR&maxResults=10&key=${process.env.NEXT_PUBLIC_YOUTUBE_APP_KEY}`
-    );
-    return res.json();
-  };
+      `https://youtube.googleapis.com/youtube/v3/channels?part=statistics&id=${id}&regionCode=KR&maxResults=10&key=${process.env.NEXT_PUBLIC_YOUTUBE_APP_KEY}`,
+    )
+    return res.json()
+  }
 
   const combinedQueries = useQueries({
     queries: channelsList.map((channel) => ({
-      queryKey: ["channelData", channel.id],
+      queryKey: ['channelData', channel.id],
       queryFn: () => fetchChannelData(channel),
     })),
     combine: (results) => {
       return {
         data: results.map((result) => result.data),
-      };
+      }
     },
-  });
+  })
 
   // 오늘날씨 (서울기준)
   const fetchTodayWeather = async () => {
     const res = await fetch(
-      `https://api.openweathermap.org/data/2.5/weather?lat=37.5666791&lon=126.9782914&appid=${process.env.NEXT_PUBLIC_OPENWEATHER_APP_ID}&units=metric`
-    );
-    return res.json();
-  };
+      `https://api.openweathermap.org/data/2.5/weather?lat=37.5666791&lon=126.9782914&appid=${process.env.NEXT_PUBLIC_OPENWEATHER_APP_ID}&units=metric`,
+    )
+    return res.json()
+  }
 
   const { data: TodayWeather } = useQuery({
-    queryKey: ["TodayWeatherKey"],
+    queryKey: ['TodayWeatherKey'],
     queryFn: fetchTodayWeather,
-  });
+  })
 
-  const [foodRecommendation, setFoodRecommendation] = useState("");
-  const [todayWeatherTxt, setTodayWeatherTxt] = useState("");
-  const [foodTaste, setFoodTaste] = useState("");
-  const [tasteTxtLong, setTasteTxtLong] = useState("");
+  const [foodRecommendation, setFoodRecommendation] = useState('')
+  const [todayWeatherTxt, setTodayWeatherTxt] = useState('')
+  const [foodTaste, setFoodTaste] = useState('')
+  const [tasteTxtLong, setTasteTxtLong] = useState('')
   useEffect(() => {
-    const weatherDescription = TodayWeather?.weather[0].description;
-    const temperature = TodayWeather?.main.temp;
+    const weatherDescription = TodayWeather?.weather[0].description
+    const temperature = TodayWeather?.main.temp
 
     const determineWeatherKey = () => {
-      if (weatherDescription === "rain") return "rain";
-      if (weatherDescription === "snow") return "snow";
-      if (temperature >= 30) return "hot";
-      if (temperature > 10 && temperature < 30 && weatherDescription !== "rain")
-        return "sunny";
-      if (temperature <= 0) return "cold";
-      if (temperature > 0 && temperature <= 10) return "windy";
+      if (weatherDescription === 'rain') return 'rain'
+      if (weatherDescription === 'snow') return 'snow'
+      if (temperature >= 30) return 'hot'
+      if (temperature > 10 && temperature < 30 && weatherDescription !== 'rain')
+        return 'sunny'
+      if (temperature <= 0) return 'cold'
+      if (temperature > 0 && temperature <= 10) return 'windy'
 
       return Object.keys(weatherFood).find(
-        (key) => weatherFood[key].weatherTxtEN === weatherDescription
-      );
-    };
+        (key) => weatherFood[key].weatherTxtEN === weatherDescription,
+      )
+    }
 
-    const weatherKey = determineWeatherKey();
+    const weatherKey = determineWeatherKey()
 
     if (weatherKey) {
       const { food, weatherTxt, tasteTxt, tasteTxtLong } =
-        weatherFood[weatherKey];
-      setFoodRecommendation(food);
-      setTodayWeatherTxt(weatherTxt);
-      setFoodTaste(tasteTxt);
-      setTasteTxtLong(tasteTxtLong);
+        weatherFood[weatherKey]
+      setFoodRecommendation(food)
+      setTodayWeatherTxt(weatherTxt)
+      setFoodTaste(tasteTxt)
+      setTasteTxtLong(tasteTxtLong)
     }
-  }, [TodayWeather?.main.temp, TodayWeather?.weather]);
+  }, [TodayWeather?.main.temp, TodayWeather?.weather])
 
   return (
     <>
@@ -118,8 +118,8 @@ export default function Home() {
                 id="search"
                 onChange={(e) => setSearchTxt(e.target.value)}
                 onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    moveToRecipes(searchTxt)();
+                  if (e.key === 'Enter') {
+                    moveToRecipes(searchTxt)()
                   }
                 }}
                 placeholder="원하는 요리 또는 식재료를 영문으로 검색하세요"
@@ -144,10 +144,10 @@ export default function Home() {
             </div>
           </div>
           <div className={styles.infoList}>
-            <div onClick={moveToRecipes("pasta")}>
+            <div onClick={moveToRecipes('pasta')}>
               <div className="list_img">
                 <Image
-                  src={"/image/pasta.avif"}
+                  src={'/image/pasta.avif'}
                   alt="pasta"
                   width={500}
                   height={540}
@@ -170,10 +170,10 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            <div onClick={moveToRecipes("pork")}>
+            <div onClick={moveToRecipes('pork')}>
               <div className="list_img">
                 <Image
-                  src={"/image/pork.avif"}
+                  src={'/image/pork.avif'}
                   alt="pork"
                   width={500}
                   height={540}
@@ -196,10 +196,10 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            <div onClick={moveToRecipes("egg")}>
+            <div onClick={moveToRecipes('egg')}>
               <div className="list_img">
                 <Image
-                  src={"/image/egg.avif"}
+                  src={'/image/egg.avif'}
                   alt="egg"
                   width={500}
                   height={540}
@@ -234,7 +234,7 @@ export default function Home() {
             </p>
             <div className="recommend_info">
               <p>
-                오늘은 {todayWeatherTxt} 날씨네요. 이런 날씨에는 {foodTaste}{" "}
+                오늘은 {todayWeatherTxt} 날씨네요. 이런 날씨에는 {foodTaste}{' '}
                 {foodRecommendation}가 어떠신가요? <br />
                 {tasteTxtLong} 즐겨보세요.
               </p>
@@ -244,7 +244,7 @@ export default function Home() {
             {foodRecommendation && (
               <Image
                 src={
-                  foodRecommendation === "망고빙수"
+                  foodRecommendation === '망고빙수'
                     ? `/image/food/망고빙수.png`
                     : `/image/food/${foodRecommendation}.jpg`
                 }
@@ -273,7 +273,7 @@ export default function Home() {
             <div className={styles.topRanker}>
               <div>
                 <Image
-                  src={"/image/youtube1.jpg"}
+                  src={'/image/youtube1.jpg'}
                   alt="youtube1"
                   width={110}
                   height={110}
@@ -281,19 +281,19 @@ export default function Home() {
                 <div className="topranker_info">
                   <p>백종원 PAIK JONG WON</p>
                   <p>
-                    구독자{" "}
+                    구독자{' '}
                     {commaThousand(
                       +combinedQueries.data[0]?.items[0].statistics
-                        .subscriberCount
+                        .subscriberCount,
                     )}
-                    명 | 동영상{" "}
+                    명 | 동영상{' '}
                     {combinedQueries.data[0]?.items[0].statistics.videoCount}개
                   </p>
                 </div>
                 <div className="topranker_channel">
                   <Link
                     target="_blank"
-                    href={"https://www.youtube.com/@paik_jongwon"}
+                    href={'https://www.youtube.com/@paik_jongwon'}
                   >
                     <p>
                       go to <br /> channel
@@ -317,7 +317,7 @@ export default function Home() {
                     <Link
                       target="_blank"
                       href={
-                        "https://www.youtube.com/playlist?list=PLoABXt5mipg6mIdGKBuJlv5tmQFAQ3OYr"
+                        'https://www.youtube.com/playlist?list=PLoABXt5mipg6mIdGKBuJlv5tmQFAQ3OYr'
                       }
                     >
                       View More
@@ -334,23 +334,23 @@ export default function Home() {
             <div className={styles.otherRanker}>
               <Link
                 target="_blank"
-                href={"https://www.youtube.com/@deliciousday1"}
+                href={'https://www.youtube.com/@deliciousday1'}
               >
                 <div className="ranker_info">
                   <p>매일맛나 delicious day</p>
                   <p>
-                    구독자{" "}
+                    구독자{' '}
                     {commaThousand(
                       +combinedQueries.data[1]?.items[0].statistics
-                        .subscriberCount
+                        .subscriberCount,
                     )}
-                    명 | 동영상{" "}
+                    명 | 동영상{' '}
                     {combinedQueries.data[1]?.items[0].statistics.videoCount}개
                   </p>
                 </div>
                 <div className="ranker_img">
                   <Image
-                    src={"/image/youtube2.jpg"}
+                    src={'/image/youtube2.jpg'}
                     alt="youtube2"
                     width={80}
                     height={80}
@@ -360,23 +360,23 @@ export default function Home() {
 
               <Link
                 target="_blank"
-                href={"https://www.youtube.com/@onemealaday767"}
+                href={'https://www.youtube.com/@onemealaday767'}
               >
                 <div className="ranker_info">
                   <p>하루한끼 one meal a day</p>
                   <p>
-                    구독자{" "}
+                    구독자{' '}
                     {commaThousand(
                       +combinedQueries.data[2]?.items[0].statistics
-                        .subscriberCount
+                        .subscriberCount,
                     )}
-                    명 | 동영상{" "}
+                    명 | 동영상{' '}
                     {combinedQueries.data[2]?.items[0].statistics.videoCount}개
                   </p>
                 </div>
                 <div className="ranker_img">
                   <Image
-                    src={"/image/youtube3.jpg"}
+                    src={'/image/youtube3.jpg'}
                     alt="youtube3"
                     width={80}
                     height={80}
@@ -386,23 +386,23 @@ export default function Home() {
 
               <Link
                 target="_blank"
-                href={"https://www.youtube.com/@cooking_haru"}
+                href={'https://www.youtube.com/@cooking_haru'}
               >
                 <div className="ranker_info">
                   <p>쿠킹하루 Cooking Haru :)</p>
                   <p>
-                    구독자{" "}
+                    구독자{' '}
                     {commaThousand(
                       +combinedQueries.data[3]?.items[0].statistics
-                        .subscriberCount
+                        .subscriberCount,
                     )}
-                    명 | 동영상{" "}
+                    명 | 동영상{' '}
                     {combinedQueries.data[3]?.items[0].statistics.videoCount}개
                   </p>
                 </div>
                 <div className="ranker_img">
                   <Image
-                    src={"/image/youtube4.jpg"}
+                    src={'/image/youtube4.jpg'}
                     alt="youtube4"
                     width={80}
                     height={80}
@@ -427,12 +427,12 @@ export default function Home() {
               play
               style={{ width: 220, height: 220 }}
             />
-            <Link href={"/nutrition"} className="submitNutrition_btn">
+            <Link href={'/nutrition'} className="submitNutrition_btn">
               Analysis
             </Link>
           </div>
         </section>
       </main>
     </>
-  );
+  )
 }

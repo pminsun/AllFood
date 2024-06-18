@@ -1,66 +1,66 @@
-import Link from "next/link";
-import { useState, useEffect } from "react";
-import styles from "@/styles/Header.module.css";
-import { signOut, useSession } from "next-auth/react";
+import Link from 'next/link'
+import { useState, useEffect } from 'react'
+import styles from '@/styles/Header.module.css'
+import { signOut, useSession } from 'next-auth/react'
 
 export default function Header() {
-  const { data: session, status } = useSession();
+  const { data: session, status } = useSession()
 
-  const [scrollPosition, setScrollPosition] = useState(0);
+  const [scrollPosition, setScrollPosition] = useState(0)
   const handleScroll = () => {
-    const position = window.scrollY;
-    setScrollPosition(position);
-  };
+    const position = window.scrollY
+    setScrollPosition(position)
+  }
 
   useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll)
     return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [])
 
   // logoutModal
-  const [logoutModal, setLogoutModal] = useState(false);
+  const [logoutModal, setLogoutModal] = useState(false)
   const handleShowLogoutModal = () => {
-    setLogoutModal(true);
-    document.body.style.overflow = "hidden";
-  };
+    setLogoutModal(true)
+    document.body.style.overflow = 'hidden'
+  }
 
   return (
     <>
       <header
         className={`${styles.header} ${
-          scrollPosition > 80 ? styles.headerChange : ""
+          scrollPosition > 80 ? styles.headerChange : ''
         }`}
       >
         <div>
           <nav>
             <ul>
               <li>
-                <Link href={"/nutrition"}>Nutrition</Link>
+                <Link href={'/nutrition'}>Nutrition</Link>
               </li>
               <li>
-                <Link href={"/recipes"}>RECIPES</Link>
+                <Link href={'/recipes'}>RECIPES</Link>
               </li>
             </ul>
           </nav>
           <h1>
-            <Link href={"/"}>AllFood</Link>
+            <Link href={'/'}>AllFood</Link>
           </h1>
           <nav>
             <ul>
               <li>
-                {status === "authenticated" ? (
-                  <Link href={"/user/mypage"}>MY Page</Link>
+                {status === 'authenticated' ? (
+                  <Link href={'/user/mypage'}>MY Page</Link>
                 ) : (
-                  <Link href={"/user/login"}>LOGIN</Link>
+                  <Link href={'/user/login'}>LOGIN</Link>
                 )}
               </li>
-              {status === "authenticated" ? (
+              {status === 'authenticated' ? (
                 <p onClick={handleShowLogoutModal}>LOGOUT</p>
               ) : (
                 <li>
-                  <Link href={"/user/signup"}>Sign up</Link>
+                  <Link href={'/user/signup'}>Sign up</Link>
                 </li>
               )}
             </ul>
@@ -77,8 +77,8 @@ export default function Header() {
             <div className="modalBtn_area">
               <p
                 onClick={() => {
-                  setLogoutModal(false);
-                  document.body.style.overflow = "auto";
+                  setLogoutModal(false)
+                  document.body.style.overflow = 'auto'
                 }}
               >
                 취소
@@ -90,5 +90,5 @@ export default function Header() {
         </>
       )}
     </>
-  );
+  )
 }

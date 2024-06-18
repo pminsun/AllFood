@@ -11,12 +11,12 @@
 .title {
   letter-spacing: 8px;
   font-size: 62px;
-  font-family: "Poetsen One", sans-serif;
+  font-family: 'Poetsen One', sans-serif;
 }
 .title p {
   letter-spacing: 16px;
   font-size: 82px;
-  font-family: "Poetsen One", sans-serif;
+  font-family: 'Poetsen One', sans-serif;
 }
 .search {
   position: relative;
@@ -133,7 +133,7 @@
   color: #585858;
 }
 .listInfo ul li::before {
-  content: "";
+  content: '';
   position: absolute;
   left: 0;
   top: 50%;
@@ -167,7 +167,7 @@
 .recommendLeft :global(.recommend_title) {
   font-size: 52px;
   font-weight: 500;
-  font-family: "Poetsen One", sans-serif;
+  font-family: 'Poetsen One', sans-serif;
 }
 .recommendLeft :global(.recommend_info) {
   display: flex;
@@ -331,7 +331,7 @@
 .infoNutritionText h3 {
   font-size: 52px;
   font-weight: 500;
-  font-family: "Poetsen One", sans-serif;
+  font-family: 'Poetsen One', sans-serif;
 }
 .infoNutritionText p {
   word-break: keep-all;
@@ -357,7 +357,7 @@
   width: 250px;
   font-size: 24px;
   font-weight: 600;
-  font-family: "Poetsen One", sans-serif;
+  font-family: 'Poetsen One', sans-serif;
   word-spacing: 20px;
   background-color: #c6cdc6;
   transition: all 0.2s;
