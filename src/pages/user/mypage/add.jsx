@@ -8,6 +8,7 @@ import { auth, fireStore } from '../../../../firebase/firebasedb'
 import { v4 as uuid } from 'uuid'
 import { useRouter } from 'next/router'
 import Loading from '@/components/Loading'
+import { useSession } from 'next-auth/react'
 
 // 레시피 재료
 const IngredientInput = ({
@@ -75,6 +76,7 @@ const IngredientInput = ({
 }
 
 export default function MyListAdd({ query }) {
+  const { data: session, status } = useSession()
   const [load, setLoad] = useState(false)
   const router = useRouter()
   const [recipeName, setRecipeName] = useState('')
@@ -95,11 +97,8 @@ export default function MyListAdd({ query }) {
   // 현재 로그인 정보
   const [currentUser, setCurrentUser] = useState(null)
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      setCurrentUser(user)
-    })
-
-    return () => unsubscribe()
+    setCurrentUser(session.user.email)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // page type
@@ -110,7 +109,7 @@ export default function MyListAdd({ query }) {
       const fetchData = async () => {
         const docRef = doc(
           fireStore,
-          `users/${currentUser?.uid}/myrecipes`,
+          `users/${currentUser}/myrecipes`,
           query.id,
         )
         const docSnap = await getDoc(docRef)
@@ -192,7 +191,7 @@ export default function MyListAdd({ query }) {
 
       const imageRef = ref(
         storage,
-        `myrecipe/${currentUser.uid}_${uploadFileName}`,
+        `myrecipe/${currentUser}_${uploadFileName}`,
       )
 
       // 파일 내용을 읽습니다
@@ -217,7 +216,7 @@ export default function MyListAdd({ query }) {
 
       // 레시피 데이터를 Firestore에 저장합니다
       await addDoc(
-        collection(fireStore, `users/${currentUser.uid}/myrecipes`),
+        collection(fireStore, `users/${currentUser}/myrecipes`),
         recipeData,
       )
       setLoading(false)
@@ -242,7 +241,7 @@ export default function MyListAdd({ query }) {
         const uploadFileName = uuid() + submitImage.name
         const imageRef = ref(
           storage,
-          `myrecipe/${currentUser.uid}_${uploadFileName}`,
+          `myrecipe/${currentUser}_${uploadFileName}`,
         )
 
         // 파일을 업로드하고 업로드가 완료될 때까지 기다립니다
@@ -261,7 +260,7 @@ export default function MyListAdd({ query }) {
       // 레시피 데이터를 Firestore에 업데이트합니다
       const docRef = doc(
         fireStore,
-        `users/${currentUser.uid}/myrecipes`,
+        `users/${currentUser}/myrecipes`,
         query.id,
       )
       await updateDoc(docRef, recipeData)

@@ -31,7 +31,7 @@ export default function Signup() {
         data.password,
       )
       const user = userCredential.user
-      const userDoc = doc(USER_COLLECTION, user.uid)
+      const userDoc = doc(USER_COLLECTION, data.email)
       await setDoc(userDoc, {
         uid: user.uid,
         email: data.email,

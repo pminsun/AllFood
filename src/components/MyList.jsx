@@ -5,23 +5,22 @@ import { collection, getDocs } from 'firebase/firestore'
 import { ref, listAll, getDownloadURL } from 'firebase/storage'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useSession } from 'next-auth/react'
 
 export default function MyList() {
+  const { data: session, status } = useSession()
   const [load, setLoad] = useState(false)
   // 현재 로그인 정보
   const [currentUser, setCurrentUser] = useState(null)
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      setCurrentUser(user)
-    })
-
-    return () => unsubscribe()
+    setCurrentUser(session.user.email)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const [recipesList, setRecipesList] = useState([])
   const fetchData = async () => {
     const querySnapshot = await getDocs(
-      collection(fireStore, `users/${currentUser?.uid}/myrecipes`),
+      collection(fireStore, `users/${currentUser}/myrecipes`),
     )
 
     const data = querySnapshot.docs
@@ -48,6 +47,7 @@ export default function MyList() {
         return url
       }),
     )
+    console.log(urls)
     setUrlImage(urls)
   }
 
@@ -63,6 +63,7 @@ export default function MyList() {
     if (load) {
       fetchDataAndImage() // load 상태가 true이면 fetchDataAndImage 함수를 실행합니다.
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [load])
 
   return (
@@ -78,9 +79,9 @@ export default function MyList() {
                   .find(
                     (img) =>
                       img.includes(item.image) &&
-                      img.includes(currentUser?.uid),
+                      img.includes(currentUser.replace(/@/g, '%40')),
                   )
-                  ?.split('%')[1],
+                  ?.split('myrecipe%')[1],
             },
           }}
           key={index}
@@ -90,7 +91,7 @@ export default function MyList() {
               urlImage.map(
                 (img) =>
                   img.includes(item.image) &&
-                  img.includes(currentUser?.uid) && (
+                  img.includes(currentUser.replace(/@/g, '%40')) && (
                     <Image
                       key={img}
                       src={img}
@@ -108,20 +109,3 @@ export default function MyList() {
   )
 }
 
-export async function getStaticProps() {
-  const fileRef = ref(fireStorage, 'coverImage/')
-  // coverImage/ 하위에 있는 모든 파일에 대한 참조
-  const result = await listAll(fileRef)
-  const urls = await Promise.all(
-    result.items.map(async (item) => {
-      const url = await getDownloadURL(item)
-      return url
-    }),
-  )
-
-  return {
-    props: {
-      images: urls,
-    },
-  }
-}

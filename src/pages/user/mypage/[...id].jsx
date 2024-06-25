@@ -5,24 +5,23 @@ import { collection, deleteDoc, doc, getDocs } from 'firebase/firestore'
 import React, { useEffect, useState } from 'react'
 import { deleteObject, ref, getStorage } from 'firebase/storage'
 import { useRouter } from 'next/router'
+import { useSession } from 'next-auth/react'
 
 export default function MyListDetail({ query }) {
+  const { data: session, status } = useSession()
   const [load, setLoad] = useState(false)
   const router = useRouter()
   // 현재 로그인 정보
   const [currentUser, setCurrentUser] = useState(null)
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      setCurrentUser(user)
-    })
-
-    return () => unsubscribe()
+    setCurrentUser(session.user.email)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const [filteredData, setFilteredData] = useState([])
   const fetchData = async () => {
     const querySnapshot = await getDocs(
-      collection(fireStore, `users/${currentUser?.uid}/myrecipes`),
+      collection(fireStore, `users/${currentUser}/myrecipes`),
     )
     const data = querySnapshot.docs.map((doc) => ({
       id: doc.id,
@@ -48,7 +47,7 @@ export default function MyListDetail({ query }) {
   const handleDelete = async (id, imgPath) => {
     try {
       // Delete the document from Firestore
-      await deleteDoc(doc(fireStore, `users/${currentUser?.uid}/myrecipes`, id))
+      await deleteDoc(doc(fireStore, `users/${currentUser}/myrecipes`, id))
 
       // Delete the image from Firebase Storage
       const storage = getStorage()
@@ -100,7 +99,7 @@ export default function MyListDetail({ query }) {
                         onClick={() =>
                           handleDelete(
                             item.id,
-                            `${currentUser?.uid}_${item.imageId}`,
+                            `${currentUser}_${item.imageId}`,
                           )
                         }
                         className={styles.tabTitle_btn}
